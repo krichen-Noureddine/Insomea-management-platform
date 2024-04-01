@@ -1,0 +1,68 @@
+.container{
+    position: sticky;
+    width: 160px; /* Add width */
+
+  }
+  
+  .user{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .userImage{
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .userDetail{
+    display: flex;
+    flex-direction: column;
+  }
+  .logoContainer {
+    margin-bottom: 10;
+    /* Adjust margin as needed */
+   /* Don't forget to include the unit (px) */
+    width:  auto; /* Keep width consistent with the image width */
+    height:  auto; /* Keep height consistent with the image height */
+  }
+  
+ 
+  .username{
+    font-weight: 400;
+  }
+  
+  .userTitle{
+    font-size: 12px;
+    color: var(--textSoft);
+  }
+  
+  .list{
+    list-style: none;
+  }
+  
+  .cat{
+    color: var(--textSoft);
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0px;
+  }
+  
+  .logout{
+    padding: 20px;
+    margin: 5px 0px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    background: none;
+    border: none;
+    color: white;
+    width: 100%;
+  }
+  
+  .logout:hover{
+    background-color: #2e374a;
+  }

@@ -1,0 +1,55 @@
+/* users.module.css */
+.container {
+  background-color: var(--bgSoft);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.h1 {
+  margin-bottom: 20px;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 5px;
+  border: 1px solid #ffffff;
+}
+
+.table th {
+  background-color: #128C8B;
+}
+
+.table td {
+  text-align: left;
+}
+
+.top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.addButton{
+  padding: 10px;
+  background-color: #5d57c9;
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buttons{
+  display: flex;
+  gap: 10px;
+}

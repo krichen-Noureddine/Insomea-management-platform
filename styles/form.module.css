@@ -1,0 +1,153 @@
+/* Container styling: minor adjustments for padding and margin to make it more compact */
+.container {
+    background-color: var(--bgSoft);
+    padding: 15px; /* Reduced padding */
+    border-radius: 10px;
+    margin-top: 10px; /* Reduced margin-top for less space above the form */
+}
+
+/* Flexbox layout for the form: tighter layout with reduced gap */
+.form {
+    display: flex;
+    flex-wrap: wrap; /* Using wrap for flexible layout */
+    gap: 10px; /* Reduced gap for a tighter layout */
+    justify-content: space-between; /* Helps in evenly spacing elements */
+}
+
+/* Input, textarea, and select elements: reduced margin and adjusted padding for compactness */
+.form input,
+.form textarea,
+.form select {
+    background-color: var(--bg);
+    color: var(--text);
+    border: 2px solid #2e374a;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+    margin-bottom: 10px;
+    min-width: 260px;
+    margin-left: 10px;
+    
+   /* Adjust if necessary after applying border-box */
+    
+}
+
+/* Adjusting textarea to be more compact */
+.form textarea {
+    width: 100%;
+    height: 100px; /* Optional: Adjust height as needed for compactness */
+}
+
+/* In form.module.css */
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 8px; /* Adjust padding as needed */
+    border: 1px solid #dddddd;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #128C8B;
+    color: white;
+    font-weight: bold;
+  }
+  
+  
+  
+  .table tr:hover {
+    background-color: #44b49d;
+  }
+  
+
+
+
+/* Search Bar Styles */
+.searchAndFilterBar {
+    display: flex;
+    /* Space out search, filter, and PDF export button */
+    padding: 10px;
+    margin-bottom: 20px;
+    
+}
+
+.searchInput, .filterSelect {
+    padding: 8px;
+    margin-right: 10px; /* Space between search/filter and the button */
+    border: 3px solid #128C8B;
+    border-radius: 20px;
+    background-color: var(--bg);
+   
+}
+
+.pdfExportButton {
+    padding: 8px 20px;
+    background-color: #128C8B; /* Example color, choose what fits your design */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.searchInput::placeholder {
+    color: white; /* Change #888 to whatever color you prefer */
+    opacity: 1; /* Ensures the color is not transparent; adjust as needed */
+}
+@media screen and (max-width: 600px) {
+    .searchAndFilterBar {
+        flex-direction: column;
+    }
+    .searchInput, .filterSelect, .pdfExportButton {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .searchInput, .form input, .form select {
+        width: 100%; /* Full width on smaller screens */
+        margin-left: 0; /* Remove margin on smaller screens for full width */
+        margin-right: 0; /* Ensure inputs and search bar stretch fully */
+    }
+}
+@media screen and (max-width: 600px) {
+    .searchAndFilterBar {
+        flex-direction: column;
+    }
+    .searchInput, .filterSelect, .pdfExportButton {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+.submitButton  {
+    width: 100%;
+    padding: 10px; /* Reduced padding */
+    background-color: #128C8B;
+    color: var(--text);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px; /* Ensure some space above the button without being too much */
+}
+.closeButton {
+    background-color: #f44336; /* Red background for the close button */
+    border: none; /* Removes the border */
+    border-radius: 5px;
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    display: flex; /* Enables flexbox */
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    width: 100%;
+    height: 20px;
+    padding: 0; /* Adjust or remove padding as needed */
+    /* Ensure any other necessary styles for the close button here */
+}
+

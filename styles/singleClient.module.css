@@ -1,0 +1,6 @@
+.container {
+    background-color: var(--bgSoft);
+    padding: 15px; /* Reduced padding */
+    border-radius: 10px;
+    margin-top: 10px; /* Reduced margin-top for less space above the form */
+}

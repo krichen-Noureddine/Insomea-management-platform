@@ -1,0 +1,46 @@
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.popup {
+    background-color: #128C8B;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Adjust width as necessary */
+    max-width: 90%; /* Ensure it doesn't exceed the screen width */
+    z-index: 1001; /* Above the overlay */
+}
+
+.confirmButton, .cancelButton {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.confirmButton {
+    background-color: #ff4d4d; /* Red */
+    color: white;
+}
+
+.cancelButton {
+    background-color: #ccc; /* Light grey */
+    color: black;
+}
+
+/* Additional styling for the buttons on hover */
+.confirmButton:hover, .cancelButton:hover {
+    opacity: 0.9;
+}
