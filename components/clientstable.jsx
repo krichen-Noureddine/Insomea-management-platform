@@ -60,7 +60,17 @@ const ClientsTable = ({ clients, setClients ,onEdit}) => {
         }
     };
     
-    
+    const getProgressColor = (progress) => {
+        if (progress < 25) {
+            return '#ff3860'; // Red
+        } else if (progress < 50) {
+            return '#ffdd57'; // Yellow
+        } else if (progress < 75) {
+            return '#23d160'; // Green
+        } else {
+           
+        }
+    };
     
 
     if (isLoading) return <p>Loading clients...</p>;
@@ -101,6 +111,8 @@ const ClientsTable = ({ clients, setClients ,onEdit}) => {
                     <thead>
                         <tr>
                             <th>Company Name</th>
+                            <th>Progress</th>
+
                             <th>Contact Name</th>
                             <th>Contact Email</th>
                             <th>Contact Phone</th>
@@ -123,6 +135,15 @@ const ClientsTable = ({ clients, setClients ,onEdit}) => {
       
 
                                 <td>{client.companyName}</td>
+                                <td>
+                <div className={styles.progressBarContainer}>
+                    <div 
+                        className={styles.progressBar} 
+                        style={{ width: `${client.progress}%`, backgroundColor: getProgressColor(client.progress) }}>
+                        {client.progress}%
+                    </div>
+                </div>
+            </td>
                                 <td>{client.contactName}</td>
                                 <td>{client.contactEmail}</td>
                                 <td>{client.contactPhone}</td>

@@ -19,7 +19,7 @@ import {
 import { FaUser } from "react-icons/fa";
 const menuItems = [
   {
-    title: "Dashboard",
+    
     list: [
      
       {
@@ -46,7 +46,7 @@ const menuItems = [
     ],
   },
   {
-    title: "Analytics",
+   
     list: [
       {
         title: "Revenue",
@@ -58,15 +58,11 @@ const menuItems = [
         path: "/dashboard/reports",
         icon: <MdAnalytics />,
       },
-      {
-        title: "Teams",
-        path: "/dashboard/teams",
-        icon: <MdPeople />,
-      },
+    
     ],
   },
   {
-    title: "User",
+   
     list: [
       {
         title: "Users",

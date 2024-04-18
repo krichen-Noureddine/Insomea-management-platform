@@ -1,8 +1,4 @@
-.container{
-    position: sticky;
-    width: 160px; /* Add width */
 
-  }
   
   .user{
     display: flex;

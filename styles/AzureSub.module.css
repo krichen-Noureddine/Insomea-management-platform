@@ -1,0 +1,36 @@
+.container {
+    background-color: #182237; /* Updated background color */
+    color: #ffffff; /* Ensure text is readable on the new background */
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px #0000001a; /* Adding a subtle shadow for depth */
+}
+/* In AzureForm.module.css or a new CSS module */
+.button {
+    width: 100%;
+    padding: 10px;
+    background-color: #128c8c2c;
+    color: var(--text);
+    border: 10px;
+    
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+
+  }
+  .button.active {
+    background-color: #09a523; /* Change background color of active button */
+}
+
+.button:hover {
+    background-color: #09a523; /* Darker background color on hover */
+}
+
+
+  .buttonBar {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px; /* Adjust based on your design preference */
+  }
+  

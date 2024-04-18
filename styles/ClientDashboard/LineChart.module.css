@@ -1,0 +1,9 @@
+.chartContainer {
+    padding: 20px;
+    background-color: #2a3950; /* Slightly different shade to create a subtle distinction */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Optional: Adds depth */
+    color: #ffffff; /* Ensures any text is white for contrast */
+    margin: 20px;
+    min-height: 300px; /* Adds some spacing around the chart container */
+}

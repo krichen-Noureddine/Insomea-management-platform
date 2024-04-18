@@ -1,3 +1,4 @@
+
 /* Container styling: minor adjustments for padding and margin to make it more compact */
 .container {
     background-color: var(--bgSoft);
@@ -7,44 +8,30 @@
 }
 
 /* Flexbox layout for the form: tighter layout with reduced gap */
-/* Flexbox layout for the form: tighter layout with reduced gap */
-/* Flexbox layout for the form: wrap items and maintain default spacing */
 .form {
     display: flex;
     flex-wrap: wrap; /* Using wrap for flexible layout */
     gap: 10px; /* Reduced gap for a tighter layout */
+    justify-content: space-between; /* Helps in evenly spacing elements */
 }
 
 /* Input, textarea, and select elements: reduced margin and adjusted padding for compactness */
 .form input,
-
 .form textarea,
 .form select {
-    background-color: rgba(77, 24, 24, 0);
+    background-color: var(--bg);
     color: var(--text);
     border: 2px solid #2e374a;
     border-radius: 10px;
     padding: 8px;
-    margin-bottom: 10px; /* Maintain consistent margin */
+    margin-bottom: 10px;
+    margin-bottom: 10px;
+    min-width: 260px;
+    margin-left: 10px;
     
-    flex: 1; /* Allow elements to expand to fill available space */
+   /* Adjust if necessary after applying border-box */
+    
 }
-.form select option {
-    background-color: #333; /* Dark background color */
-    color: #fff; /* Light text color */
-  }
-/* Form group styling */
-.formGroup {
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    min-height: auto;
-    max-width:max-content;
-    min-height: -content;
-    margin-right: 15px; /* Increase margin between form groups */
-}
-
-
-
 
 /* Adjusting textarea to be more compact */
 .form textarea {
@@ -58,7 +45,6 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
   }
   
   .table th,
@@ -180,4 +166,21 @@
     line-height: 20px; /* Same as height for vertical centering */
     color: rgb(128, 26, 26);
     transition: width 0.4s ease-in-out;
+}
+
+.submitBtn {
+    background-color: #005A9C;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+   /* Allow the button to grow and fill the available space */
+}
+.submitBtn:hover {
+    background-color: #004080;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

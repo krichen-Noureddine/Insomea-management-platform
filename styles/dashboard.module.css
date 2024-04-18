@@ -1,10 +1,11 @@
 .container {
   
     display: flex;
-
+    
   }
   
   .menu {
+    position: fixed;
     max-width: 200px; /* Set maximum width for menu */
 
     flex: 1;
@@ -15,6 +16,7 @@
   .content {
     flex: 4;
     padding: 20px;
+    margin-left: 200px;
   }
   
   .wrapper {

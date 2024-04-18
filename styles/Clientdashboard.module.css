@@ -1,0 +1,99 @@
+
+.card{
+    
+        background-color: #2a3950;  /* Dark blue background, good for contrast */
+        color: #ffffff;  /* White text for high contrast */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        display: flex;
+        flex-direction: column;
+        /* Centering content for a cleaner look */
+        gap: 10px;
+        margin: 20px auto; /* Centering widget horizontally */
+        width: 100%;
+        max-width: 400px; /* Maximum width, adjust based on your layout preferences */
+    
+}
+.statusIndicator {
+    text-align: center;
+    padding: 8px;
+    font-weight: bold;
+    color: #ffffff;
+    border-radius: 12px;
+    background-color: #4caf50; /* Dynamic based on status */
+}
+
+.active {
+    background-color: #4caf50; /* Green for active */
+}
+
+.inactive {
+    background-color: #f44336; /* Red for inactive */
+}
+
+.loading, .notFound {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 50px;
+}
+.clientTable th {
+    font-weight: bold;
+    background-color: #2a3950; /* Background for headers */
+}
+.clientTable {
+    width: 100%;
+    margin-top: 16px;
+}
+
+
+.clientTable td {
+    padding: 10px;
+    text-align: left;
+}
+
+.actions button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.actions button:hover {
+    background-color: #63b3ed;
+}
+.AzureBillingDateWidgetcontainer {
+    background-color: #2a3950;  /* Dark blue background, good for contrast */
+    color: #ffffff;  /* White text for high contrast */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centering content for a cleaner look */
+    gap: 10px;
+    margin: 20px auto; /* Centering widget horizontally */
+    width: 100%;
+    max-width: 400px; /* Maximum width, adjust based on your layout preferences */
+}
+
+.AzureBillingDateWidgetcontainer h2 {
+    font-size: 1.5rem; /* Slightly larger font for the header */
+    margin-bottom: 0.5rem; /* Space below the header */
+    text-align: center; /* Center-align the text for the header */
+    padding-bottom: 10px; /* Padding below the header */
+    border-bottom: 1px solid #4a5568; /* Subtle line under the header */
+}
+
+.AzureBillingDateWidgetcontainer p {
+    font-size: 1.2rem; /* Clear and readable font size */
+    font-weight: bold; /* Bold font for emphasis */
+    padding: 5px 10px; /* Padding for visual comfort */
+    background-color: #1a202c; /* Slightly darker background for the paragraph */
+    border-radius: 5px; /* Rounded corners for the paragraph */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); /* Inner shadow for depth */
+}

@@ -1,0 +1,20 @@
+/* active-subscriptions.module.css */
+
+.activeSubscriptions {
+    background-color: #1a237e; /* Dark blue background color */
+    color: #fff; /* White text color */
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  
+  .number {
+    font-size: 36px; /* Increase the font size for the number */
+    font-weight: bold;
+    display: block; /* Ensure the number is on a separate line */
+  }
+  
+  .label {
+    font-size: 14px;
+  }
+  

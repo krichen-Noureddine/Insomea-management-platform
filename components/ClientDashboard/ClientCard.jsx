@@ -1,4 +1,4 @@
-import styles from '../styles/ClientCard.module.css'; // Ajustez le chemin d'accès selon le besoin
+import styles from '../../styles/Clientdashboard.module.css'; // Ajustez le chemin d'accès selon le besoin
 
 const ClientCard = ({ client, onEditClick, onDetailsClick }) => {
   return (
