@@ -1,28 +1,44 @@
+import { getAccessToken, getOrganizationDetails } from '@/utils/microsoftGraph';
 import clientPromise from "@/database/mongodb";
-const { ObjectId } = require('mongodb');
+import { Credentials } from "@/model/Credentials";
+import Client from '@/model/client'; // Import Client model
+
+const GRAPH_SCOPE = 'https://graph.microsoft.com/.default';
 
 export default async function handler(req, res) {
-    const {
-        query: { id },
-        method,
-        body,
-    } = req;
+    const { id, action } = req.query; // Extract action from query
+    const { method, body } = req;
 
     const client = await clientPromise;
-    const collection = client.db().collection('clients');
+    const collection = client.connection.db.collection('clients'); // Update collection name
 
     switch (method) {
         case 'GET':
             try {
-                if (!ObjectId.isValid(id)) {
-                    return res.status(400).json({ error: 'Invalid client ID format' });
-                }
-
-                const objectId = new ObjectId(id);
-                const clientData = await collection.findOne({ _id: objectId });
+                const clientData = await collection.findOne({ _id: id });
 
                 if (!clientData) {
                     return res.status(404).json({ error: 'Client not found' });
+                }
+
+                // Fetch organization details if action is specified
+                if (action === 'getOrganizationDetails') {
+                    const credentials = await Credentials.findOne({ clientId: String(id) });
+
+                    if (!credentials) {
+                        return res.status(404).json({ error: "No credentials found for the provided client ID" });
+                    }
+
+                    const { tenantId, azureClientId, clientSecret } = credentials;
+                    const accessToken = await getAccessToken(tenantId, azureClientId, clientSecret, GRAPH_SCOPE);
+                    const organizationDetails = await getOrganizationDetails(accessToken);
+
+                    const updatedClientData = {
+                        ...clientData,
+                        organizationDetails: organizationDetails[0]
+                    };
+
+                    return res.status(200).json(updatedClientData);
                 }
 
                 return res.status(200).json(clientData);
@@ -32,20 +48,32 @@ export default async function handler(req, res) {
             }
         case 'PUT':
             try {
-                // Validation Example: Ensure ID is valid
-                if (!ObjectId.isValid(id)) {
-                    return res.status(400).json({ error: 'Invalid client ID format' });
-                }
-
-                const objectId = new ObjectId(id);
-                const updateData = { ...body };
+                // Fetch access token and organization details if action is specified
+                let updateData = { ...body };
                 delete updateData._id; // Exclude immutable _id field from update payload
 
-                // More rigorous validation can be added here
-                // For example, checking for required fields, field formats, etc.
+                if (body.action === 'getOrganizationDetails') {
+                    const credentials = await Credentials.findOne({ clientId: String(id) });
+
+                    if (!credentials) {
+                        return res.status(404).json({ error: "No credentials found for the provided client ID" });
+                    }
+
+                    const { tenantId, azureClientId, clientSecret } = credentials;
+                    const accessToken = await getAccessToken(tenantId, azureClientId, clientSecret, GRAPH_SCOPE);
+                    const organizationDetails = await getOrganizationDetails(accessToken);
+
+                    updateData = {
+                        ...updateData,
+                        companyName: organizationDetails[0].displayName,
+                        clientLocation: organizationDetails[0].city,
+                        clientAddress: organizationDetails[0].street,
+                        domains: organizationDetails[0].verifiedDomains.map(domain => domain.name),
+                    };
+                }
 
                 const updateResult = await collection.updateOne(
-                    { _id: objectId },
+                    { _id: id },
                     { $set: updateData }
                 );
 
@@ -59,17 +87,15 @@ export default async function handler(req, res) {
                 }
 
                 // Fetch and return the updated document
-                const updatedClient = await collection.findOne({ _id: objectId });
+                const updatedClient = await collection.findOne({ _id: id });
                 return res.status(200).json(updatedClient);
-
             } catch (error) {
                 console.error('Update error:', error);
                 return res.status(500).json({ error: 'Server error while updating client', details: error.message });
             }
         case 'DELETE':
             try {
-                const objectId = new ObjectId(id);
-                const result = await collection.deleteOne({ _id: objectId });
+                const result = await collection.deleteOne({ _id: id });
                 if (result.deletedCount === 1) {
                     res.status(200).json({ message: 'Client deleted successfully' });
                 } else {
@@ -79,11 +105,9 @@ export default async function handler(req, res) {
                 res.status(500).json({ error: 'Server error' });
             }
             break;
-        
-        // You can add a case for 'GET' here if you need to fetch individual client data
 
         default:
-            res.setHeader('Allow', ['DELETE', 'PUT']); // Include 'GET' if implemented
+            res.setHeader('Allow', ['DELETE', 'PUT', 'GET']); // Include 'GET'
             res.status(405).end(`Method ${method} Not Allowed`);
     }
 }

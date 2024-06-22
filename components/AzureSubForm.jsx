@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from "../styles/form.module.css";
+import styles from '../styles/form.module.css';
 
 function AzureForm() {
     const [formData, setFormData] = useState({
@@ -101,7 +101,7 @@ function AzureForm() {
                 resellerId: '',
                 azureOffer: '',
                 purchaseOrderNumber: '',
-                status: 'Active',
+                
             });
         } catch (error) {
             console.error('Failed to add subscription:', error);

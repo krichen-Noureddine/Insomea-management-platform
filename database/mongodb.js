@@ -1,31 +1,36 @@
-// database/mongodb.js
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 
 const uri = process.env.MONGODB_URI;
 const options = {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    connectTimeoutMS: 30000,  // Connection timeout in milliseconds
+    socketTimeoutMS: 45000,   // Socket timeout in milliseconds
+    retryWrites: false,       // Disable retryWrites for Cosmos DB compatibility
+    maxIdleTimeMS: 120000,    // Set maximum idle time for connections
+    ssl: true,                // Enable SSL for secure connection (important for Cosmos DB)
+    authSource: 'admin',      // Often required for authentication in Cosmos DB
+    appName: '@insomea-mp@'          // Custom application name for tracking
 };
 
-let client;
+if (!uri) {
+    throw new Error('Add Mongo URI to .env.local');
+}
+
 let clientPromise;
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local');
+if (process.env.NODE_ENV === 'development') {
+    console.log('Connecting to MongoDB in development mode...');
+    if (!global._mongooseClientPromise) {
+        global._mongooseClientPromise = mongoose.connect(uri, options);
+    }
+    clientPromise = global._mongooseClientPromise;
+} else {
+    console.log('Connecting to MongoDB in production mode...');
+    clientPromise = mongoose.connect(uri, options);
 }
 
-if (process.env.NODE_ENV === 'development') {
-  // In development mode, use a global variable so the database connection
-  // is preserved between hot reloads.
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
-  }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
-}
+clientPromise.then(() => console.log('MongoDB Connected via Mongoose'))
+             .catch(err => console.error('MongoDB connection error:', err));
 
 export default clientPromise;

@@ -6,13 +6,7 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-        display: flex;
-        flex-direction: column;
-        /* Centering content for a cleaner look */
-        gap: 10px;
-        margin: 20px auto; /* Centering widget horizontally */
-        width: 100%;
-        max-width: 400px; /* Maximum width, adjust based on your layout preferences */
+     
     
 }
 .statusIndicator {

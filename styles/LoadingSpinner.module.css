@@ -1,0 +1,12 @@
+.spinnerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height of the viewport */
+    
+}
+
+.spinner {
+    font-size: 90rem;
+    color: #949494; /* Adjust color as needed */
+}

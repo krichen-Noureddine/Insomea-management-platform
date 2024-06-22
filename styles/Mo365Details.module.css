@@ -1,0 +1,88 @@
+.container {
+    background-color: #002b5b; /* Dark blue background */
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    color: #ffffff; /* Text color set to white for better readability */
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #ffffff; /* Title color set to white */
+}
+
+.card {
+    background-color: #ffffff; /* White background for card */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    color: #002b5b; /* Text color set to dark blue for card content */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.enabled {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.disabled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon {
+    font-size: 2em;
+    color: #002b5b; /* Icon color set to dark blue */
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.details ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.details li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.successIcon {
+    color: #28a745;
+}
+
+.failIcon {
+    color: #dc3545;
+}

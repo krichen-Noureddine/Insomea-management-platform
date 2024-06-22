@@ -1,8 +1,9 @@
-import clientPromise from '../../../database/mongodb'; // Adjust the import path as necessary
+import clientPromise from "@/database/mongodb";
 
 export default async function handler(req, res) {
     const client = await clientPromise;
-    const db = client.db(); // Use client.db('yourDatabaseName') if your db name is not the default one
+  
+    const db = client.connection.db; // Use client.db('yourDatabaseName') if your db name is not the default one
 
     switch (req.method) {
         case 'GET':

@@ -1,21 +1,24 @@
-
+// components/Layout.js
+import React from 'react';
 import Navbar from './Navbar';
-import Sidebar from './sidebar';
-import styles from "../styles/dashboard.module.css"
+import Sidebar from './Sidebar';
+import { useNotification } from "./Notification";
+import styles from "../styles/dashboard.module.css";
 
 const Layout = ({children}) => {
-    return (
-       <div className={styles.container}>
-        <div className={styles.menu}>
-          <Sidebar/>
-        </div>
-        <div className={styles.content}>
-          <Navbar/>
-          {children}
-       
-        </div>
+  const { showNotificationPane } = useNotification();
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.menu}>
+        <Sidebar />
       </div>
-    )
-  }
-  
-  export default Layout
+      <div className={`${styles.content} ${showNotificationPane ? styles.shifted : ''}`}>
+        <Navbar />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export default Layout;

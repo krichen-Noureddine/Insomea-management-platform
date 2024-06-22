@@ -1,0 +1,62 @@
+
+.container {
+    background-color: var(--bgSoft);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.tableWrapper {
+    margin-top: 20px;
+}
+
+/* Client Section Styles */
+.clientSection {
+    margin-bottom: 20px;
+    border: 1px solid #16c71f;
+    border-radius: 5px;
+    background-color: var(--bgSoft);
+    padding: 10px;
+}
+
+.clientHeader {
+    background-color: #128C8B;
+    color: var(--bgSoft);
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+
+
+.clientHeader h3 {
+    margin: 15;
+}
+
+.clientHeader p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.subscriptionsList {
+    padding: 10px;
+    background-color: var(--bgSoft);
+}
+
+
+
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+    .clientHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .clientHeader h3 {
+        margin-bottom: 5px;
+    }
+    .clientHeader p {
+        margin-bottom: 5px;
+    }
+}

@@ -35,7 +35,7 @@ const menuItems = [
       },
       {
         title: "Licences office 365",
-        path: "/dashboard/transactions",
+        path: "/mo365",
         icon: <MdAttachMoney />,
       },
       {
@@ -49,8 +49,8 @@ const menuItems = [
    
     list: [
       {
-        title: "Revenue",
-        path: "/dashboard/revenue",
+        title: "Calendar",
+        path: "/calendar",
         icon: <MdWork />,
       },
       {
@@ -58,7 +58,11 @@ const menuItems = [
         path: "/dashboard/reports",
         icon: <MdAnalytics />,
       },
-    
+      {
+        title: "Teams",
+        path: "/dashboard/teams",
+        icon: <MdPeople />,
+      },
     ],
   },
   {

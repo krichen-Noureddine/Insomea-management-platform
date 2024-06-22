@@ -1,0 +1,21 @@
+/* calendarStyles.css */
+
+.event-container {
+    background-color: #212121; /* Default primary color for dark mode */
+    padding: 15px;
+    border-radius: 4px;
+  }
+  
+  .event-title {
+    color: #13a2a2; /* Default green accent color */
+    margin: 10px 0;
+    border-radius: 2px;
+  }
+  .container {
+    background-color:#0b5c5c; /* Updated background color */
+    color: #ffffff; /* Ensure text is readable on the new background */
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px #0000001a; /* Adding a subtle shadow for depth */
+}

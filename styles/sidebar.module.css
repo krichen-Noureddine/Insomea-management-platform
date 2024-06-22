@@ -62,3 +62,18 @@
   .logout:hover{
     background-color: #2e374a;
   }
+  .toggleButton {
+    background-color: transparent;
+    color: white; /* Set the text color to white */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .toggleButton:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Lighten the background color on hover */
+  }

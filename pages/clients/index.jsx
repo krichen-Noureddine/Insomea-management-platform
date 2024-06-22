@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import ClientForm from '../../components/AddClientForm';
 import ClientsTable from '@/components/clientstable';
+import NavBar from '@/components/navbar2'; // Ensure this path is correct
+import ClientCredentialsSetup from '@/components/credentialsForm';
+import CredentialsComponent from '@/components/credentialsTable';
+import { useNotification } from '@/components/Notification';
 
 const ClientsPage = () => {
+    const { addNotification } = useNotification();
     const [clients, setClients] = useState([]);
+    const [credentials, setCredentials] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [editingClient, setEditingClient] = useState(null);
     const [showForm, setShowForm] = useState(false);
-    
-    const onEdit = (client) => {
-        console.log("Editing client:", client);
-    
-        setEditingClient(client);
-        setShowForm(true); // Show the form when editing is initiated
+    const [activeComponent, setActiveComponent] = useState('combinedView'); // Set initial state to combinedView
 
-
-    };
-    const resetFormMode = () => {
-        setEditingClient(null);
-        setShowForm(false);
-    };
     useEffect(() => {
         const fetchClients = async () => {
             try {
@@ -31,54 +26,79 @@ const ClientsPage = () => {
                 setClients(data);
             } catch (error) {
                 console.error(error);
+                addNotification('Failed to fetch clients', 'error');
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchClients();
-    }, []);
+    }, [addNotification]);
+
+    useEffect(() => {
+        const fetchCredentials = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/credentials');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch credentials');
+                }
+                const data = await response.json();
+                setCredentials(data);
+            } catch (error) {
+                console.error(error);
+                addNotification('Failed to fetch credentials', 'error');
+            }
+        };
+
+        fetchCredentials();
+    }, [addNotification]);
+
+    const onEdit = (client) => {
+        setEditingClient(client);
+        setShowForm(true); // Show the form when editing is initiated
+        setActiveComponent('combinedView'); // Switch to combined view
+    };
+
+    const resetFormMode = () => {
+        setEditingClient(null);
+        setShowForm(false);
+        setActiveComponent('combinedView'); // Switch back to combined view
+    };
+
     const handleUpdate = async (formData) => {
-        console.log("Initiating update with formData:", formData);
-    
         try {
-            console.log(`Sending PUT request to update client with ID: ${editingClient._id}`);
             const response = await fetch(`http://localhost:3000/api/clients/${editingClient._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
-    
+
             if (!response.ok) {
-                console.log(`Update failed with status: ${response.status}`);
                 throw new Error('Failed to update client');
             }
-    
+
             const updatedClient = await response.json();
-            console.log("Update successful, server response:", updatedClient);
-            setClients(currentClients => {
-                const updatedClientsList = currentClients.map(client =>
+            setClients((currentClients) =>
+                currentClients.map((client) =>
                     client._id === editingClient._id ? { ...client, ...formData, ...updatedClient } : client
-                );
-                console.log("Updated clients list:", updatedClientsList);
-                return updatedClientsList;
-            });
-    
-            setShowForm(false); // Optionally close form after successful update
-            setEditingClient(null); // Reset editing client state
-            console.log("Client update process completed.");
+                )
+            );
+
+            setShowForm(false);
+            setEditingClient(null);
+            setActiveComponent('combinedView'); // Switch back to combined view after update
+            addNotification('Client updated successfully', 'success');
         } catch (error) {
             console.error('Error updating client:', error);
+            addNotification('Failed to update client', 'error');
         }
     };
-    
+
     const handleCreate = async (formData) => {
         try {
             const response = await fetch('http://localhost:3000/api/clients', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
             if (response.ok) {
@@ -87,27 +107,51 @@ const ClientsPage = () => {
                     ...formData,
                     _id: responseData.insertedId, // Use insertedId as _id
                 };
-                
-                setClients(currentClients => [...currentClients, newClient]);
+
+                setClients((currentClients) => [...currentClients, newClient]);
+                setActiveComponent('combinedView'); // Switch back to combined view after creation
+                addNotification('Client created successfully', 'success');
             } else {
                 console.error('Failed to add client:', response.statusText);
+                addNotification('Failed to add client', 'error');
             }
         } catch (error) {
             console.error('Error creating client:', error);
+            addNotification('Error creating client', 'error');
         }
     };
-    
-    
+
+    const handleNewCredential = (newCredential) => {
+        setCredentials((currentCredentials) => [...currentCredentials, newCredential]);
+    };
 
     return (
         <div>
-           <ClientForm handleSubmit={editingClient ? handleUpdate : handleCreate} initialData={editingClient} showForm={showForm} 
-                setShowForm={setShowForm} resetFormMode={resetFormMode} />
-
-            {isLoading ? (
-                <p>Loading clients...</p>
-            ) : (
-                <ClientsTable clients={clients} setClients={setClients} onEdit={onEdit}  />
+            <NavBar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+            {activeComponent === 'combinedView' && (
+                <div>
+                    <ClientForm
+                        handleSubmit={editingClient ? handleUpdate : handleCreate}
+                        initialData={editingClient}
+                        showForm={showForm}
+                        setShowForm={setShowForm}
+                        resetFormMode={resetFormMode}
+                    />
+                    <div>
+                        {isLoading ? (
+                            <p>Loading clients...</p>
+                        ) : (
+                            <ClientsTable clients={clients} setClients={setClients} onEdit={onEdit} />
+                        )}
+                    </div>
+                </div>
+            )}
+            {activeComponent === 'credentialsSetup' && (
+                <div>
+                    <ClientCredentialsSetup onNewCredential={handleNewCredential} />
+                    <CredentialsComponent credentials={credentials} clients={clients} />
+                </div>
+                
             )}
         </div>
     );
