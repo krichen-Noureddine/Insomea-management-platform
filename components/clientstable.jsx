@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from '../styles/form.module.css'; // Import CSS module file for styling
+import styles from '@/styles/form.module.css'; // Import CSS module file for styling
 import { DeleteConfirmationPopup } from './DeleteConfirmationPopup';
 import { useRouter } from 'next/router';
 

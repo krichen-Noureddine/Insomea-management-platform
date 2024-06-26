@@ -217,7 +217,36 @@ const fetchEmailActivityReports = async (accessToken) => {
   }
 };
 const getOrganizationDetails = async (accessToken) => {
-  const url = 'https://graph.microsoft.com/v1.0/organization';
+  // Specify the fields you want to include in the response
+  const fields = [
+    
+    'deletedDateTime',
+    'businessPhones',
+    'city',
+    'country',
+    'countryLetterCode',
+    'createdDateTime',
+    'defaultUsageLocation',
+    'displayName',
+    'isMultipleDataLocationsForServicesEnabled',
+    'marketingNotificationEmails',
+    'onPremisesLastSyncDateTime',
+    'onPremisesSyncEnabled',
+    'partnerTenantType',
+    'postalCode',
+    'preferredLanguage',
+    'securityComplianceNotificationMails',
+    'securityComplianceNotificationPhones',
+    'state',
+    'street',
+    'technicalNotificationMails',
+    'tenantType',
+    'directorySizeQuota',
+    'privacyProfile',
+    'verifiedDomains'
+  ].join(',');
+
+  const url = `https://graph.microsoft.com/v1.0/organization?$select=${fields}`;
   const headers = {
     Authorization: `Bearer ${accessToken}`,
     'Content-Type': 'application/json',
@@ -242,6 +271,7 @@ const getOrganizationDetails = async (accessToken) => {
     throw error;
   }
 };
+
 
 
 

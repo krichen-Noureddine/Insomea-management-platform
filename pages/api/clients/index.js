@@ -23,7 +23,10 @@ export default async function handler(req, res) {
                 }
                 break;
             case 'POST':
-                const newClient = new Client(req.body);
+                const newClient = new Client({
+                    ...req.body,
+                    createdClientDateTime: new Date() // Set createdDateTime to current date/time
+                });
             
                 await newClient.save();
                 res.status(201).json({ message: 'Client added successfully', insertedId: newClient._id });

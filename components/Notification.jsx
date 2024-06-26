@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import styles from '@/styles/notif.module.css';
+import styles from '../styles/notif.module.css';
 
 const NotificationContext = createContext();
 

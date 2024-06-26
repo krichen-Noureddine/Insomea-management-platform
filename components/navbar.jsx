@@ -1,21 +1,22 @@
-// components/Navbar.js
-"use client";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { MdNotifications, MdOutlineChat, MdPublic, MdSearch } from "react-icons/md";
 import { useNotification } from "./Notification";
 import styles from "../styles/navbar.module.css";
 
 const Navbar = () => {
-  const pathname = usePathname();
+  const router = useRouter();
   const { addNotification, toggleNotificationPane } = useNotification();
 
-  // Add a static notification on component mount
- 
+  useEffect(() => {
+    addNotification("Welcome to the dashboard!");
+  }, [addNotification]);
+
+  const pageTitle = router.pathname.split("/").pop() || "Home";
 
   return (
     <div className={styles.container}>
-      <div className={styles.title}>{pathname.split("/").pop()}</div>
+      <div className={styles.title}>{pageTitle}</div>
       <div className={styles.menu}>
         <div className={styles.search}>
           <MdSearch />

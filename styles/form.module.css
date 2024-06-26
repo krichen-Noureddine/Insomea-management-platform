@@ -1,17 +1,17 @@
 
 
-.error {
-    color: red;
-    font-size: 0.9em;
-    margin-top: 5px;
-}
+
 
 
 .form {
     flex-direction: column; 
     gap: 80px; 
 }
-
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
 
 .form input,
 .form textarea,

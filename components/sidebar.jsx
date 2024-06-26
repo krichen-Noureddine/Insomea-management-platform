@@ -1,7 +1,9 @@
+import React from 'react';
+
 import { useState } from 'react';
 import Image from "next/image";
 import MenuLink from "./menuLink";
-import useAuthentication from '@/utils/auth';
+import useAuthentication from '../utils/auth';
 import styles from "../styles/sidebar.module.css";
 import {
   MdDashboard,
