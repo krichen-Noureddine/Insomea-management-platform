@@ -5,9 +5,11 @@
 
 trigger:
 - main
-
 pool:
-  vmImage: ubuntu-latest
+  name: Default
+  demands:
+  - agent.name -equals DESKTOP-LV6N60A
+
 
 steps:
 - script: echo Hello, world!
