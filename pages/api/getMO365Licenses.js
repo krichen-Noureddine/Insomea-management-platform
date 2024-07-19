@@ -112,6 +112,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ value: emailActivityReports });
 
         case 'getOrganizationDetails':
+          
           const organizationDetails = await getOrganizationDetails(token);
   
           console.log('Fetched organization details:', organizationDetails);

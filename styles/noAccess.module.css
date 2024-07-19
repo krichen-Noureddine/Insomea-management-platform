@@ -1,0 +1,10 @@
+.container {
+    background-color: var(--bgSoft);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 400px; /* Adjust height as needed */
+}

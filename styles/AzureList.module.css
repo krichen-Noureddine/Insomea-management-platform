@@ -13,14 +13,14 @@
 /* Client Section Styles */
 .clientSection {
     margin-bottom: 20px;
-    border: 1px solid #16c71f;
+    border: 1px solid #060606;
     border-radius: 5px;
     background-color: var(--bgSoft);
     padding: 10px;
 }
 
 .clientHeader {
-    background-color: #128C8B;
+    background-color: #efefef;
     color: var(--bgSoft);
     padding: 10px;
     border-radius: 5px 5px 0 0;
@@ -45,7 +45,48 @@
     background-color: var(--bgSoft);
 }
 
+.searchAndFilterBar {
+    display: flex;
+    padding: 10px;
+    margin-bottom: 20px;
+}
 
+.searchInput, .filterSelect, .pdfExportButton {
+    padding: 8px;
+    margin-right: 10px;
+    border: 3px solid #128C8B;
+    border-radius: 20px;
+    background-color: var(--bg);
+    color: white;
+}
+
+.pdfExportButton {
+    background-color: #128C8B;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.searchInput::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+.formControl {
+    width: 200px; /* Adjust width as needed */
+}
+
+@media screen and (max-width: 600px) {
+    .searchAndFilterBar {
+        flex-direction: column;
+    }
+
+    .searchInput, .filterSelect, .pdfExportButton {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
 
 /* Responsive Styles */
 @media screen and (max-width: 600px) {

@@ -24,12 +24,12 @@ const Accordion = ({ subscription, onRefresh }) => {
             </div>
             {isOpen && (
                 <div className={styles.accordionContent}>
-                                        <p><strong>Service Type:</strong> {subscription.serviceType}</p>
+                                       
 
                     <p><strong>azureOffer:</strong> {subscription.azureOffer}</p>
-                    <p><strong>Subscription Start Date:</strong> {new Date(subscription.subscriptionStartDate).toLocaleDateString()}</p>
                     <p><strong>Status:</strong> {subscription.status}</p>
-                    
+                    <p><strong>Subscription Id </strong> {subscription.subscriptionId}</p>
+
                     {/* Add more subscription details as needed */}
                 </div>
             )}

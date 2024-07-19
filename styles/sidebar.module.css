@@ -17,7 +17,7 @@
     flex-direction: column;
   }
   .logoContainer {
-    margin-bottom: 10;
+    margin-top: auto;
     /* Adjust margin as needed */
    /* Don't forget to include the unit (px) */
     width:  auto; /* Keep width consistent with the image width */
@@ -60,7 +60,7 @@
   }
   
   .logout:hover{
-    background-color: #2e374a;
+    background-color: #adadad;
   }
   .toggleButton {
     background-color: transparent;
@@ -77,3 +77,22 @@
   .toggleButton:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Lighten the background color on hover */
   }
+  .signIn {
+    display: flex;
+  
+    align-items: center;
+    justify-content: center;
+    padding: 12px; /* Adjust padding to control button size */
+    background-color: #128c8b;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Makes the button circular */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: auto; /* Centers the button horizontally */
+  }
+  
+  .signInIcon {
+    font-size: 20px; /* Adjust icon size as needed */
+  }
+  

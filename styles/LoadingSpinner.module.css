@@ -3,10 +3,9 @@
     justify-content: center;
     align-items: center;
     height: 100vh; /* Full height of the viewport */
-    
 }
 
 .spinner {
-    font-size: 90rem;
+    font-size: 9rem; /* Adjust the font size to make the spinner smaller */
     color: #949494; /* Adjust color as needed */
 }

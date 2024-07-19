@@ -46,53 +46,59 @@ export default async function handler(req, res) {
                 console.error('Fetch error:', error);
                 return res.status(500).json({ error: 'Server error while fetching client', details: error.message });
             }
-        case 'PUT':
-            try {
-                // Fetch access token and organization details if action is specified
-                let updateData = { ...body };
-                delete updateData._id; // Exclude immutable _id field from update payload
+            case 'PUT':
+                try {
+                    // Fetch access token and organization details if action is specified
+                    let updateData = { ...body };
+                    delete updateData._id; // Exclude immutable _id field from update payload
+                    updateData.updatedTimestamp = new Date();
+                    updateData.createdClientDateTime= new Date().toISOString();// Properly formatted date
 
-                if (body.action === 'getOrganizationDetails') {
-                    const credentials = await Credentials.findOne({ clientId: String(id) });
+                    if (action === 'getOrganizationDetails') {
+                        const credentials = await Credentials.findOne({ clientId: String(id) });
+            
+                        if (!credentials) {
+                            return res.status(404).json({ error: "No credentials found for the provided client ID" });
+                        }
+            
+                        const { tenantId, azureClientId, clientSecret } = credentials;
+                        const accessToken = await getAccessToken(tenantId, azureClientId, clientSecret, GRAPH_SCOPE);
+                        const organizationDetails = await getOrganizationDetails(accessToken);
+            
+                        updateData = {
+                            ...updateData,
+                            companyName: organizationDetails[0].displayName,
+                            clientLocation: organizationDetails[0].city,
+                            tenantType: organizationDetails[0].tenantType,
+                            clientAddress: organizationDetails[0].street,
 
-                    if (!credentials) {
-                        return res.status(404).json({ error: "No credentials found for the provided client ID" });
+                    
+                            domains: organizationDetails[0].verifiedDomains.map(domain => domain.name),
+                        };
                     }
-
-                    const { tenantId, azureClientId, clientSecret } = credentials;
-                    const accessToken = await getAccessToken(tenantId, azureClientId, clientSecret, GRAPH_SCOPE);
-                    const organizationDetails = await getOrganizationDetails(accessToken);
-
-                    updateData = {
-                        ...updateData,
-                        companyName: organizationDetails[0].displayName,
-                        clientLocation: organizationDetails[0].city,
-                        clientAddress: organizationDetails[0].street,
-                        domains: organizationDetails[0].verifiedDomains.map(domain => domain.name),
-                    };
+            
+                    const updateResult = await collection.updateOne(
+                        { _id: id },
+                        { $set: updateData }
+                    );
+            
+                    if (updateResult.matchedCount === 0) {
+                        return res.status(404).json({ error: 'Client not found' });
+                    }
+            
+                    if (updateResult.modifiedCount === 0) {
+                        // No changes made to the document
+                        return res.status(200).json({ message: 'No changes detected or applied', updateData });
+                    }
+            
+                    // Fetch and return the updated document
+                    const updatedClient = await collection.findOne({ _id: id });
+                    return res.status(200).json(updatedClient);
+                } catch (error) {
+                    console.error('Update error:', error);
+                    return res.status(500).json({ error: 'Server error while updating client', details: error.message });
                 }
-
-                const updateResult = await collection.updateOne(
-                    { _id: id },
-                    { $set: updateData }
-                );
-
-                if (updateResult.matchedCount === 0) {
-                    return res.status(404).json({ error: 'Client not found' });
-                }
-
-                if (updateResult.modifiedCount === 0) {
-                    // No changes made to the document
-                    return res.status(200).json({ message: 'No changes detected or applied' });
-                }
-
-                // Fetch and return the updated document
-                const updatedClient = await collection.findOne({ _id: id });
-                return res.status(200).json(updatedClient);
-            } catch (error) {
-                console.error('Update error:', error);
-                return res.status(500).json({ error: 'Server error while updating client', details: error.message });
-            }
+            
         case 'POST':
             try {
                 // Fetch organization details from Graph API
@@ -124,7 +130,7 @@ export default async function handler(req, res) {
                     marketingNotificationEmails: organizationDetails[0].marketingNotificationEmails,
                     securityComplianceNotificationMails: organizationDetails[0].securityComplianceNotificationMails,
                     securityComplianceNotificationPhones: organizationDetails[0].securityComplianceNotificationPhones,
-                    createdDateTime: organizationDetails[0].createdDateTime,
+                    createdClientDateTime: new Date().toISOString() ,// Properly formatted date
                     defaultUsageLocation: organizationDetails[0].defaultUsageLocation,
                     isMultipleDataLocationsForServicesEnabled: organizationDetails[0].isMultipleDataLocationsForServicesEnabled,
                     onPremisesLastSyncDateTime: organizationDetails[0].onPremisesLastSyncDateTime,

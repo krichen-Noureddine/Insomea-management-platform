@@ -5,9 +5,13 @@ import NavBar from '@/components/navbar2'; // Ensure this path is correct
 import ClientCredentialsSetup from '@/components/credentialsForm';
 import CredentialsComponent from '@/components/credentialsTable';
 import { useNotification } from '@/components/Notification';
-
+import useAuthentication from '@/utils/auth';
+import { TbLock } from "react-icons/tb";
+import styles from '@/styles/noAccess.module.css'
 const ClientsPage = () => {
     const { addNotification } = useNotification();
+    const { isAuthenticated, account, login, logout } = useAuthentication(); // Authentication state
+
     const [clients, setClients] = useState([]);
     const [credentials, setCredentials] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -125,6 +129,21 @@ const ClientsPage = () => {
         setCredentials((currentCredentials) => [...currentCredentials, newCredential]);
     };
 
+    // Deny access if not authenticated
+    if (!isAuthenticated) {
+        return (
+            <div>
+                <NavBar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+                <div className={styles.container}>
+                    <div style={{ textAlign: 'center' }}>
+                        <TbLock style={{ fontSize: '20rem' }} />
+                        <p style={{ marginTop: '2px' }}>You do not have permission to view this page.</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div>
             <NavBar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
@@ -151,7 +170,6 @@ const ClientsPage = () => {
                     <ClientCredentialsSetup onNewCredential={handleNewCredential} />
                     <CredentialsComponent credentials={credentials} clients={clients} />
                 </div>
-                
             )}
         </div>
     );

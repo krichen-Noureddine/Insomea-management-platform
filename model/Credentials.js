@@ -6,6 +6,7 @@ const credentialsSchema = new mongoose.Schema({
     tenantId: String,
     azureClientId: String, 
     clientSecret: String,
+    expirationDate: { type: Date, required: true }, // New field for expiration date
 });
 
 const Credentials = mongoose.models.Credentials || mongoose.model('Credentials', credentialsSchema);

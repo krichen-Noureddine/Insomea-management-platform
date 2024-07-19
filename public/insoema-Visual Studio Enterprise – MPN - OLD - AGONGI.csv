@@ -1,0 +1,13 @@
+Service,Cost,Usage,Date,Resource Location,Category,Currency
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD

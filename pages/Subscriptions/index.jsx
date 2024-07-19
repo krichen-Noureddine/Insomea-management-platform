@@ -6,7 +6,7 @@ import AzureSubscriptionsTable from '@/components/subscriptionsList';
 import LoadingSpinner from '../../components/LoadingSpinner'; // Import the loading spinner
 
 export default function AzureSubscriptionPage() {
-    const [activeComponent, setActiveComponent] = useState('azureForm');
+    const [activeComponent, setActiveComponent] = useState('anotherForm');
     const [subscriptions, setSubscriptions] = useState([]);
     const [clients, setClients] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -82,17 +82,12 @@ export default function AzureSubscriptionPage() {
     return (
         <div className={styles.container}>
             <div className={styles.buttonBar}>
-                <button
-                    className={`${styles.button} ${activeComponent === 'azureForm' && styles.active}`}
-                    onClick={() => handleComponentSwitch('azureForm')}
-                >
-                    New Subscription
-                </button>
+               
                 <button
                     className={`${styles.button} ${activeComponent === 'anotherForm' && styles.active}`}
                     onClick={() => handleComponentSwitch('anotherForm')}
                 >
-                    Import Azure Subscriptions
+                     Azure Subscriptions
                 </button>
                 <button
                     className={`${styles.button} ${activeComponent === 'Provider' && styles.active}`}
@@ -102,7 +97,7 @@ export default function AzureSubscriptionPage() {
                 </button>
             </div>
             <div>
-                {activeComponent === 'azureForm' && <AzureForm />}
+             
                 {activeComponent === 'anotherForm' && (
                     <AzureSubscriptionsTable
                         clients={clients}

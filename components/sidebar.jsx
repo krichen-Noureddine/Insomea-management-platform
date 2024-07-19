@@ -18,6 +18,13 @@ import {
   MdLogout,
   MdPersonOutline,
 } from "react-icons/md";
+import { HiBellAlert } from "react-icons/hi2";
+import { GrLicense } from "react-icons/gr";
+import { FaUsers } from "react-icons/fa6";
+import { FaHistory } from "react-icons/fa";
+
+import { FaSignInAlt } from 'react-icons/fa'; // Import the sign-in icon
+
 import { FaUser } from "react-icons/fa";
 const menuItems = [
   {
@@ -38,12 +45,13 @@ const menuItems = [
       {
         title: "Licences office 365",
         path: "/mo365",
-        icon: <MdAttachMoney />,
+        icon: <GrLicense />,
       },
       {
         title: "Clients",
         path: "/clients",
-        icon: <MdAttachMoney />,
+        icon: <FaUsers />,
+       
       },
     ],
   },
@@ -60,10 +68,12 @@ const menuItems = [
         path: "/dashboard/reports",
         icon: <MdAnalytics />,
       },
+     
       {
-        title: "Teams",
-        path: "/dashboard/teams",
-        icon: <MdPeople />,
+        title: "Reminder",
+        path: "/reminder",
+        icon: <HiBellAlert />
+        ,
       },
     ],
   },
@@ -114,8 +124,8 @@ const Sidebar = () => {
       </div>
       {!isAuthenticated && (
   <button className={styles.signIn} onClick={login}>
-    Sign In
-  </button>
+  <FaSignInAlt className={styles.signInIcon} /> {/* Render the sign-in icon */}
+</button>
 )}
 
 

@@ -48,16 +48,16 @@ const AlertsPage = () => {
       const client = clients.find((client) => client._id === license.clientId);
 
       // Check for suspended licenses
-      if (license.status === 'Suspended') {
-        generatedAlerts.push({
-          id: license.id,
-          client: client ? client.companyName : 'Unknown Client',
-          type: 'License Suspended',
-          description: `The license ${license.skuPartNumber} for client ${client ? client.companyName : 'Unknown'} is suspended.`,
-          date: new Date().toISOString(),
-          category: 'MO365',
-        });
-      }
+      // if (license.status === 'Suspended') {
+      //   generatedAlerts.push({
+      //     id: license.id,
+      //     client: client ? client.companyName : 'Unknown Client',
+      //     type: 'License Suspended',
+      //     description: `The license ${license.skuPartNumber} for client ${client ? client.companyName : 'Unknown'} is suspended.`,
+      //     date: new Date().toISOString(),
+      //     category: 'MO365',
+      //   });
+      // }
 
       // Check for upcoming expiration dates
       if (license.nextLifecycleDateTime && new Date(license.nextLifecycleDateTime) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)) {

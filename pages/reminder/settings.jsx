@@ -1,213 +1,91 @@
-import React, { useState } from 'react';
-import { Container, Typography, Box, TextField, Button, MenuItem, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, IconButton, Grid, Tooltip } from '@mui/material';
-import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, TextField, Button, Grid, Card, CardContent, IconButton, Divider } from '@mui/material';
+import { Add as AddIcon } from '@mui/icons-material';
+import EmailListItem from '@/components/EmailListItem';
 import TabBar from '@/components/AlertSystem/TabBar';
 import styles from '@/styles/AlertPage.module.css';
 
-const SettingsPage = () => {
-  const [emails, setEmails] = useState(['']);
-  const [azureAlertTypes, setAzureAlertTypes] = useState({
-    highUsage: { enabled: true, frequency: 'daily' },
-    lowUsage: { enabled: true, frequency: 'daily' },
-    closeExpiration: { enabled: true, frequency: 'weekly' },
-    budgetExceeding: { enabled: true, frequency: 'daily' },
-    costAnomalies: { enabled: true, frequency: 'immediate' },
-  });
-  const [mo365AlertTypes, setMo365AlertTypes] = useState({
-    licenseExpiration: { enabled: true, frequency: 'weekly' },
-    inactiveAccounts: { enabled: true, frequency: 'weekly' },
-  });
+const Settings = () => {
+  const [emails, setEmails] = useState([]);
+  const [newEmail, setNewEmail] = useState('');
 
-  const handleEmailChange = (index, e) => {
-    const newEmails = [...emails];
-    newEmails[index] = e.target.value;
-    setEmails(newEmails);
+  useEffect(() => {
+    fetchEmails();
+  }, []);
+
+  const fetchEmails = async () => {
+    try {
+      const res = await fetch('/api/reminder/emails');
+      if (!res.ok) {
+        throw new Error('Failed to fetch emails');
+      }
+      const data = await res.json();
+      setEmails(data);
+    } catch (error) {
+      console.error('Error fetching emails:', error);
+    }
   };
 
-  const handleAddEmail = () => {
-    setEmails([...emails, '']);
+  const handleAddEmail = async () => {
+    try {
+      const res = await fetch('/api/reminder/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address: newEmail }),
+      });
+      if (!res.ok) {
+        throw new Error('Failed to add email');
+      }
+      const data = await res.json();
+      setEmails([...emails, data]);
+      setNewEmail('');
+    } catch (error) {
+      console.error('Error adding email:', error);
+    }
   };
 
-  const handleRemoveEmail = (index) => {
-    const newEmails = emails.filter((_, i) => i !== index);
-    setEmails(newEmails);
-  };
-
-  const handleAlertTypeChange = (type, alert, key, value) => {
-    const newAlertTypes = type === 'azure' ? { ...azureAlertTypes } : { ...mo365AlertTypes };
-    newAlertTypes[alert] = { ...newAlertTypes[alert], [key]: value };
-    type === 'azure' ? setAzureAlertTypes(newAlertTypes) : setMo365AlertTypes(newAlertTypes);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Settings saved', { emails, azureAlertTypes, mo365AlertTypes });
+  const handleDeleteEmail = async (id) => {
+    try {
+      const res = await fetch(`/api/reminder/emails/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        throw new Error('Failed to delete email');
+      }
+      setEmails(emails.filter(email => email._id !== id));
+    } catch (error) {
+      console.error('Error deleting email:', error);
+    }
   };
 
   return (
     <div className={styles.container}>
       <TabBar />
-      <Box sx={{ mt: 3, bgcolor: 'white', color: 'black', p: 3, borderRadius: 2 }}>
-        <Typography variant="h4" gutterBottom>
-          Settings
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <Box mb={3}>
-            {emails.map((email, index) => (
-              <Box key={index} display="flex" alignItems="center" mb={2}>
-                <TextField
-                  fullWidth
-                  label={`Email Address ${index + 1}`}
-                  variant="outlined"
-                  value={email}
-                  onChange={(e) => handleEmailChange(index, e)}
-                  required
-                  sx={{
-                    input: { color: 'black' },
-                    label: { color: 'black' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'black' },
-                      '&:hover fieldset': { borderColor: 'black' },
-                      '&.Mui-focused fieldset': { borderColor: 'black' },
-                    },
-                  }}
-                />
-                <IconButton onClick={() => handleRemoveEmail(index)} sx={{ color: 'black' }}>
-                  <RemoveIcon />
-                </IconButton>
-              </Box>
-            ))}
-            <Button onClick={handleAddEmail} variant="outlined" color="primary" startIcon={<AddIcon />}>
+      <Card elevation={3} sx={{ mt: 3, p: 3, borderRadius: 2 }}>
+        <CardContent>
+      
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <TextField
+              fullWidth
+              label="New Email Address"
+              variant="outlined"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+            />
+            <Button onClick={handleAddEmail} variant="contained" color="primary" startIcon={<AddIcon />}>
               Add Email
             </Button>
           </Box>
-
-          <Grid container spacing={3} mb={3}>
-            <Grid item xs={12} md={6}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend" sx={{ color: 'black' }}>Azure Alert Types</FormLabel>
-                <FormGroup>
-                  {Object.keys(azureAlertTypes).map((alert) => (
-                    <Box key={alert} display="flex" alignItems="center" mb={2}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={azureAlertTypes[alert].enabled}
-                            onChange={(e) => handleAlertTypeChange('azure', alert, 'enabled', e.target.checked)}
-                            name="enabled"
-                            sx={{ color: 'black' }}
-                          />
-                        }
-                        label={alert.replace(/([A-Z])/g, ' $1').trim()}
-                      />
-                      <Tooltip title={
-                        alert === 'immediate' ? 'Receive alerts as soon as they are triggered.' :
-                        alert === 'daily' ? 'Receive a summary of all alerts once a day.' :
-                        'Receive a summary of all alerts once a week.'
-                      }>
-                        <TextField
-                          select
-                          value={azureAlertTypes[alert].frequency}
-                          onChange={(e) => handleAlertTypeChange('azure', alert, 'frequency', e.target.value)}
-                          variant="outlined"
-                          name="frequency"
-                          sx={{
-                            ml: 2,
-                            minWidth: 120,
-                            maxWidth: 200,
-                            input: { color: 'black' },
-                            label: { color: 'black' },
-                            '& .MuiOutlinedInput-root': {
-                              '& fieldset': { borderColor: 'black' },
-                              '&:hover fieldset': { borderColor: 'black' },
-                              '&.Mui-focused fieldset': { borderColor: 'black' },
-                            },
-                          }}
-                        >
-                          <MenuItem value="immediate">Immediate</MenuItem>
-                          <MenuItem value="daily">Daily Digest</MenuItem>
-                          <MenuItem value="weekly">Weekly Summary</MenuItem>
-                        </TextField>
-                      </Tooltip>
-                    </Box>
-                  ))}
-                </FormGroup>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend" sx={{ color: 'black' }}>MO365 Alert Types</FormLabel>
-                <FormGroup>
-                  {Object.keys(mo365AlertTypes).map((alert) => (
-                    <Box key={alert} display="flex" alignItems="center" mb={2}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={mo365AlertTypes[alert].enabled}
-                            onChange={(e) => handleAlertTypeChange('mo365', alert, 'enabled', e.target.checked)}
-                            name="enabled"
-                            sx={{ color: 'black' }}
-                          />
-                        }
-                        label={alert.replace(/([A-Z])/g, ' $1').trim()}
-                      />
-                      <Tooltip title={
-                        alert === 'immediate' ? 'Receive alerts as soon as they are triggered.' :
-                        alert === 'daily' ? 'Receive a summary of all alerts once a day.' :
-                        'Receive a summary of all alerts once a week.'
-                      }>
-                        <TextField
-                          select
-                          value={mo365AlertTypes[alert].frequency}
-                          onChange={(e) => handleAlertTypeChange('mo365', alert, 'frequency', e.target.value)}
-                          variant="outlined"
-                          name="frequency"
-                          sx={{
-                            ml: 2,
-                            minWidth: 120,
-                            maxWidth: 200,
-                            input: { color: 'black' },
-                            label: { color: 'black' },
-                            '& .MuiOutlinedInput-root': {
-                              '& fieldset': { borderColor: 'black' },
-                              '&:hover fieldset': { borderColor: 'black' },
-                              '&.Mui-focused fieldset': { borderColor: 'black' },
-                            },
-                          }}
-                        >
-                          <MenuItem value="immediate">Immediate</MenuItem>
-                          <MenuItem value="daily">Daily Digest</MenuItem>
-                          <MenuItem value="weekly">Weekly Summary</MenuItem>
-                        </TextField>
-                      </Tooltip>
-                    </Box>
-                  ))}
-                </FormGroup>
-              </FormControl>
-            </Grid>
-          </Grid>
-
-          <Button
-            type="submit"
-            variant="outlined"
-            size="large"
-            sx={{
-              color: '#182237',
-              borderColor: '#182237',
-              '&:hover': {
-                borderColor: '#182237',
-                backgroundColor: 'rgba(24, 34, 55, 0.04)',
-              },
-            }}
-          >
-            Save Settings
-          </Button>
-        </form>
-      </Box>
+          <Divider sx={{ my: 2 }} />
+          {emails.map(email => (
+            <EmailListItem key={email._id} email={email} onDelete={handleDeleteEmail} />
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 };
 
-export default SettingsPage;
+export default Settings;

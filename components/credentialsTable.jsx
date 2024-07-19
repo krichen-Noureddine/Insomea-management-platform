@@ -1,5 +1,7 @@
 import React from 'react';
 import styles from "@/styles/form.module.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 const CredentialsComponent = ({ credentials, clients }) => {
     return (
@@ -10,9 +12,10 @@ const CredentialsComponent = ({ credentials, clients }) => {
                     <tr>
                         <th>Client</th>
                         <th>Tenant ID</th>
+                        <th>Azure Client ID</th>
                         <th>Client Secret</th>
-                        <th>Azure App ID</th>
-                       
+                        <th>Expires</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,9 +25,10 @@ const CredentialsComponent = ({ credentials, clients }) => {
                             <tr key={credential._id}>
                                 <td>{client ? client.companyName : 'Unknown Client'}</td>
                                 <td>{credential.tenantId}</td>
+                                <td>{credential.azureClientId}</td>
                                 <td>{credential.clientSecret}</td>
-                                <td>{credential.azureAppId}</td>
-                               
+                                <td>{credential.expirationDate ? new Date(credential.expirationDate).toLocaleDateString() : 'No expiration date'}</td>
+                                <td><FontAwesomeIcon icon={faCheckCircle} style={{ color: 'green' }} /></td>
                             </tr>
                         );
                     })}

@@ -25,7 +25,7 @@ export default async function handler(req, res) {
             case 'POST':
                 const newClient = new Client({
                     ...req.body,
-                    createdClientDateTime: new Date() // Set createdDateTime to current date/time
+                    createdClientDateTime: new Date() 
                 });
             
                 await newClient.save();

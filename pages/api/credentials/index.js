@@ -33,32 +33,60 @@ export default async function handler(req, res) {
 // Handle GET request
 async function handleGetRequest(req, res) {
     const { clientId } = req.query;
+
+    // Function to mask client secrets
+    const maskClientSecret = (secret) => {
+        if (!secret) return '';
+        return secret.slice(0, 3) + '*'.repeat(secret.length - 3);
+    };
+
     try {
         let credentials;
+
         if (clientId) {
             console.log(`Fetching credentials for clientId: ${clientId}`);
-            credentials = await Credentials.find({ clientId: String(clientId) });
+
+            // Sanitize clientId input
+            const sanitizedClientId = String(clientId);
+
+            // Fetch credentials for the provided client ID
+            credentials = await Credentials.find({ clientId: sanitizedClientId });
+
             console.log(`Credentials found for clientId ${clientId}: ${JSON.stringify(credentials)}`);
+
             if (!credentials.length) {
                 return res.status(404).json({ error: 'No credentials found for the provided client ID' });
             }
         } else {
             console.log('Fetching all credentials');
+
+            // Fetch all credentials
             credentials = await Credentials.find();
+
             console.log(`All credentials found: ${JSON.stringify(credentials)}`);
         }
-        res.status(200).json(credentials);
+
+        // Mask client secrets before sending the response
+        const maskedCredentials = credentials.map(credential => ({
+            ...credential._doc, // Assuming Mongoose Document
+            clientSecret: maskClientSecret(credential.clientSecret)
+        }));
+
+        res.status(200).json(maskedCredentials);
     } catch (error) {
         console.error('Error fetching credentials:', error);
-        res.status(500).json({ error: 'Internal Server Error', description: error.message });
+        res.status(500).json({
+            error: 'Internal Server Error',
+            description: process.env.NODE_ENV === 'development' ? error.message : 'An error occurred while fetching credentials'
+        });
     }
 }
 
 // Handle POST request
 async function handlePostRequest(req, res) {
     try {
-        const { clientId, tenantId, clientSecret, azureClientId } = req.body;
-        const newCredentials = new Credentials({ clientId, tenantId, clientSecret, azureClientId });
+        const { clientId, tenantId, clientSecret, azureClientId, expirationDate } = req.body;
+        const newCredentials = new Credentials({ clientId, tenantId, clientSecret, azureClientId, expirationDate });
 
         // Verify credentials before saving
         const verificationResult = await verifyCredentials(azureClientId, tenantId, clientSecret);
@@ -78,7 +106,7 @@ async function handlePostRequest(req, res) {
 async function handlePutRequest(req, res) {
     const { id } = req.query;
     try {
-        const { clientId, tenantId, clientSecret, azureClientId } = req.body;
+        const { clientId, tenantId, clientSecret, azureClientId, expirationDate } = req.body;
 
         // Verify credentials before updating
         const verificationResult = await verifyCredentials(azureClientId, tenantId, clientSecret);
@@ -86,7 +114,7 @@ async function handlePutRequest(req, res) {
             return res.status(400).json({ error: verificationResult.error, description: verificationResult.description });
         }
 
-        const updatedCredentials = await Credentials.findByIdAndUpdate(id, { clientId, tenantId, clientSecret, azureClientId }, { new: true });
+        const updatedCredentials = await Credentials.findByIdAndUpdate(id, { clientId, tenantId, clientSecret, azureClientId, expirationDate }, { new: true });
         if (!updatedCredentials) {
             return res.status(404).json({ error: 'Credentials not found', description: 'No credentials found with the provided ID' });
         }

@@ -16,7 +16,84 @@
 
 .title {
   color: var(--bgSoft);
-  font-weight: bold;
+  font-weight: bold;/* styles/navbar.module.css */
+  .container {
+    padding: 15px;
+    background-color: var(--bgSoft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .notificationPane h2 {
+    color: var(--text2);
+  }
+  
+  .notification h3 {
+    color: var(--text2);
+  }
+  
+  .title {
+    color: var(--bgSoft);
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #2e374a;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .input {
+    background-color: transparent;
+    border: none;
+    color: var(--text);
+  }
+  
+  .icons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .button {
+    width: 100%;
+    padding: 10px;
+    background-color: #128c8c8e;
+    color: var(--text);
+    border: none; /* Corrected to remove border */
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .button.active {
+    background-color: #09a523; /* Change background color of active button */
+  }
+  
+  .button:hover {
+    background-color: #09a523; /* Darker background color on hover */
+  }
+  
+  .buttonBar {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px; /* Adjust based on your design preference */
+  }
+  
+  .icons .clickableIcon {
+    cursor: pointer;
+  }
+  
   text-transform: capitalize;
 }
 

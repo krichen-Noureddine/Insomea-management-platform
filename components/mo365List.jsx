@@ -1,18 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Mo365List.module.css';
 import { FaInfoCircle } from 'react-icons/fa';
 
 const Mo365List = ({ subscriptions }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredSubscriptions, setFilteredSubscriptions] = useState(subscriptions);
+
+    const handleSearchChange = (event) => {
+        const searchTerm = event.target.value;
+        setSearchTerm(searchTerm);
+
+        const filteredSubs = subscriptions.filter(subscription =>
+            subscription.clientName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredSubscriptions(filteredSubs);
+    };
+
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Subscription List</h1>
+                        <h1 className={styles.title}>Mo 365 Licenses List</h1>
+
+            <div className={`${styles.searchAndFilterBar}`}>
+                <input
+                    type="text"
+                    className={`${styles.searchInput} ${styles.formControl}`}
+                    placeholder="Search by Client Name..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+                
+                {/* Filter Select */}
+                <select className={`${styles.filterSelect} ${styles.formControl}`}>
+                    <option value="">Filter by...</option>
+                    <option value="status">Status</option>
+                    <option value="sku">SKU</option>
+                    <option value="date">Date</option>
+                </select>
+            </div>
+
+            {/* Mo365 Licenses List */}
             <table className={styles.table}>
                 <thead>
                     <tr>
-                        <th>Client ID</th>
+                     
                         <th>Client Name</th>
-                        <th>Account Name</th>
                         <th>Status</th>
                         <th>SKU</th>
                         <th>Start Date</th>
@@ -21,11 +53,10 @@ const Mo365List = ({ subscriptions }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {subscriptions.map((subscription) => (
+                    {filteredSubscriptions.map((subscription) => (
                         <tr key={subscription.id}>
-                            <td>{subscription.clientId}</td>
+                           
                             <td>{subscription.clientName}</td>
-                            <td>{subscription.accountName}</td>
                             <td>
                                 <span className={`${styles.status} ${subscription.status === 'Enabled' ? styles.enabled : styles.disabled}`}>
                                     {subscription.status}
@@ -35,8 +66,8 @@ const Mo365List = ({ subscriptions }) => {
                             <td>{new Date(subscription.createdDateTime).toLocaleDateString()}</td>
                             <td>{subscription.nextLifecycleDateTime ? new Date(subscription.nextLifecycleDateTime).toLocaleDateString() : 'N/A'}</td>
                             <td>
-                                <Link href={`/mo365/Subscriptions/${subscription._id}`} legacyBehavior>
-                                    <a className={styles.detailsButton}><FaInfoCircle /> View Details</a>
+                                <Link href={`/mo365/Subscriptions/${subscription._id}`} passHref>
+                                    <div className={styles.detailsButton}><FaInfoCircle /> View Details</div>
                                 </Link>
                             </td>
                         </tr>

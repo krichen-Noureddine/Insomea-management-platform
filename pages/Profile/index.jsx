@@ -8,14 +8,12 @@ const Profile = () => {
       <Head>
         <title>Profile - Your Application Name</title>
         <meta name="description" content="Welcome to your profile!" />
-        {/* Add additional meta tags or links to stylesheets/scripts */}
       </Head>
 
          
 
       <UserRolesPage></UserRolesPage>
 
-      {/* Additional components or elements can be added here */}
     </div>
   );
 };

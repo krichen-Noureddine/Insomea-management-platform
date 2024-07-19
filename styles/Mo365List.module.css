@@ -3,14 +3,16 @@
     padding: 20px;
     border-radius: 10px;
     margin-top: 10px;
-    color: #ffffff; /* Text color set to white for better readability */
+    color: #ffffff;
+    overflow: hidden; 
+    
 }
 
 .title {
     text-align: center;
     margin-bottom: 20px;
     font-size: 2em;
-    color: #ffffff; /* Title color set to white */
+    color: #ffffff; 
 }
 
 .table {
@@ -24,7 +26,7 @@
     padding: 15px;
     border: 1px solid #dddddd;
     text-align: left;
-    color: #ffffff; /* Ensure text color is white */
+    color: #ffffff; 
 }
 
 .table th {
@@ -90,5 +92,63 @@
     }
     .clientHeader p {
         margin-bottom: 5px;
+    }
+}
+.searchAndFilterBar {
+    display: flex;
+    /* Space out search, filter, and PDF export button */
+    padding: 10px;
+    margin-bottom: 20px;
+    
+}
+
+.searchInput, .filterSelect {
+    padding: 8px;
+    margin-right: 10px; /* Space between search/filter and the button */
+    border: 3px solid #128C8B;
+    border-radius: 20px;
+    background-color: var(--bg);
+   
+}
+
+.pdfExportButton {
+    padding: 8px 20px;
+    background-color: #128C8B; /* Example color, choose what fits your design */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.searchInput::placeholder {
+    color: white; /* Change #888 to whatever color you prefer */
+    opacity: 1; /* Ensures the color is not transparent; adjust as needed */
+}
+@media screen and (max-width: 500px) {
+    .searchAndFilterBar {
+        flex-direction: column;
+    }
+    .searchInput, .filterSelect, .pdfExportButton {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+
+@media screen and (max-width: 500px) {
+    .searchInput, .form input, .form select {
+        width: 100%; /* Full width on smaller screens */
+        margin-left: 0; /* Remove margin on smaller screens for full width */
+        margin-right: 0; /* Ensure inputs and search bar stretch fully */
+    }
+}
+@media screen and (max-width: 500px) {
+    .searchAndFilterBar {
+        flex-direction: column;
+    }
+    .searchInput, .filterSelect, .pdfExportButton {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
     }
 }

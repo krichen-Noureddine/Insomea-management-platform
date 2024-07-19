@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from '../styles/form.module.css';
 import { useNotification } from './Notification';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ClientCredentialsSetup = ({ onNewCredential }) => {
     const { addNotification } = useNotification();
     const [clients, setClients] = useState([]);
     const [selectedClient, setSelectedClient] = useState('');
     const [loading, setLoading] = useState(false);
+    const [expirationType, setExpirationType] = useState('6 months');
+    const [customExpirationDate, setCustomExpirationDate] = useState(null);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     useEffect(() => {
@@ -30,16 +34,44 @@ const ClientCredentialsSetup = ({ onNewCredential }) => {
         reset();
     };
 
+    const handleExpirationTypeChange = (event) => {
+        setExpirationType(event.target.value);
+    };
+
+    const calculateExpirationDate = (type) => {
+        const today = new Date();
+        switch (type) {
+            case '6 months':
+                return new Date(today.setMonth(today.getMonth() + 6));
+            case '12 months':
+                return new Date(today.setMonth(today.getMonth() + 12));
+            case '24 months':
+                return new Date(today.setMonth(today.getMonth() + 24));
+            case 'custom':
+                return customExpirationDate;
+            default:
+                return null;
+        }
+    };
+
     const onSubmit = async (data) => {
         setLoading(true);
         try {
             const selectedClientDetails = clients.find(client => client._id === selectedClient);
+            const expirationDate = calculateExpirationDate(expirationType);
+
+            if (!expirationDate) {
+                addNotification('Error', 'Invalid expiration date', 'error');
+                setLoading(false);
+                return;
+            }
+
             const response = await fetch('/api/credentials', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ clientId: selectedClientDetails._id, ...data }),
+                body: JSON.stringify({ clientId: selectedClientDetails._id, ...data, expirationDate }),
             });
             const responseData = await response.json();
             if (response.ok) {
@@ -47,6 +79,7 @@ const ClientCredentialsSetup = ({ onNewCredential }) => {
                 addNotification('Success', 'Credentials submitted successfully', 'success');
                 reset();
                 setSelectedClient('');
+                setCustomExpirationDate(null);
                 onNewCredential(responseData.credentials);
             } else {
                 addNotification('Error', `${responseData.error}: ${responseData.description}`, 'error');
@@ -99,6 +132,23 @@ const ClientCredentialsSetup = ({ onNewCredential }) => {
                             className={styles.input}
                         />
                         {errors.azureClientId && <p className={styles.error}>{errors.azureClientId.message}</p>}
+
+                        <select value={expirationType} onChange={handleExpirationTypeChange} className={styles.select}>
+                            <option value="6 months">6 Months</option>
+                            <option value="12 months">12 Months</option>
+                            <option value="24 months">24 Months</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        {expirationType === 'custom' && (
+                            <DatePicker
+                                selected={customExpirationDate}
+                                onChange={(date) => setCustomExpirationDate(date)}
+                                dateFormat="yyyy/MM/dd"
+                                className={styles.input}
+                                placeholderText="Select Custom Expiration Date"
+                            />
+                        )}
+                        {errors.customExpiration && <p className={styles.error}>{errors.customExpiration.message}</p>}
 
                         <button type="submit" disabled={loading} className={styles.submitButton}>
                             {loading ? 'Submitting...' : 'Submit'}

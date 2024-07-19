@@ -10,7 +10,7 @@ const options = {
     maxIdleTimeMS: 120000,    // Set maximum idle time for connections
     ssl: true,                // Enable SSL for secure connection (important for Cosmos DB)
     authSource: 'admin',      // Often required for authentication in Cosmos DB
-    appName: '@insomea-mp@'          // Custom application name for tracking
+    appName: '@imp12@'          // Custom application name for tracking
 };
 
 if (!uri) {

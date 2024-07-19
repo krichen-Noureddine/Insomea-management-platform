@@ -1,0 +1,106 @@
+/* General container styling */
+.container {
+  background-color: #182237; /* Dark blue background */
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  color: #ffffff; /* Text color set to white for better readability */
+}
+
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  padding: 8px; /* Adjust padding as needed */
+  border: 1px solid #dddddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: #128C8B;
+  color: white;
+  font-weight: bold;
+}
+
+.table tr:hover {
+  background-color: #44b49d;
+}
+
+/* Search and filter bar styling */
+.searchAndFilterBar {
+  display: flex;
+  padding: 1px;
+  margin-bottom: 20px;
+  max-height: 50px;
+}
+
+.searchInput,
+.filterSelect1 {
+  padding: 5px; /* Adjust padding as needed */
+  margin-right: 10px; /* Adjust margin as needed */
+  border-radius: 10px;
+  background-color: var(--bg); /* Adjust as needed */
+  color: rgb(0, 0, 0); /* Adjust text color as needed */
+  width: 250px; /* Set a fixed width */
+}
+
+.filterSelect option {
+  background-color: #ffffff; /* Dark blue background */
+  color: rgb(255, 255, 255); /* Text color set to white for better readability */
+}
+
+.pdfExportButton {
+  padding: 8px 20px;
+  background-color: #128C8B; /* Example color, choose what fits your design */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.searchInput::placeholder {
+  color: white; /* Change #888 to whatever color you prefer */
+  opacity: 1; /* Ensures the color is not transparent; adjust as needed */
+}
+
+/* Date picker styling */
+.dateRangePicker .rs-picker-toggle {
+  width: 250px; /* Set a fixed width */
+  padding: 5px; /* Adjust padding as needed */
+  border-radius: 10px;
+  background-color: var(--bg); /* Adjust as needed */
+  color: rgb(0, 0, 0); /* Adjust text color as needed */
+}
+
+.dateRangePicker .rs-picker-toggle-placeholder {
+  color: rgb(255, 255, 255); /* Adjust placeholder color as needed */
+}
+
+.dateRangePicker .rs-picker-toggle-clean {
+  color: #128C8B; /* Adjust clear button color as needed */
+}
+.totalCostContainer {
+  margin-top: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #128C8B;
+}
+/* Media query for responsiveness */
+@media screen and (max-width: 600px) {
+  .searchAndFilterBar {
+    flex-direction: column;
+  }
+  .searchInput,
+  .filterSelect1,
+  .pdfExportButton,
+  .dateRangePicker .rs-picker-toggle {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}

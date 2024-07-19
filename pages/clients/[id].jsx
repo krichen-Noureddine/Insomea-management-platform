@@ -1,9 +1,11 @@
+//pages/clients/[id].jsx
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ClientDetails from '@/components/ClientDetails';
 import AdditionalDetails from '@/components/AdditionalClientDetails';
 import { Box, Tabs, Tab, CircularProgress, Typography } from '@mui/material';
 
+import History from '@/components/History';
 const ClientDetail = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -48,6 +50,8 @@ const ClientDetail = () => {
       <Box sx={{ p: 3 }}>
         {tabIndex === 0 && <ClientDetails client={client} />}
         {tabIndex === 1 && <AdditionalDetails client={client.organizationDetails} />}
+        {tabIndex === 2 && <History clientId={id} />}
+
       </Box>
     </Box>
   );

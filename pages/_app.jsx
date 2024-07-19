@@ -5,6 +5,7 @@ import '../styles/globals.css';
 import { MsalProvider } from '@azure/msal-react';
 import { msalInstance } from '../utils/msalConfig';
 import { NotificationProvider } from '@/components/Notification';
+import ProtectedRoute from '@/components/needAuth';
 class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
@@ -13,7 +14,9 @@ class MyApp extends App {
       <MsalProvider instance={msalInstance}>
         <NotificationProvider>
           <Layout>
-            <Component {...pageProps} />
+            <ProtectedRoute>
+              <Component {...pageProps} />
+            </ProtectedRoute>
           </Layout>
         </NotificationProvider>
       </MsalProvider>

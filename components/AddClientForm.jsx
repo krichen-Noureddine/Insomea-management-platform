@@ -41,7 +41,7 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                 contactPhone: '',
                 clientLocation:'',
                 clientAdresse:'',
-                azureTenantId: '',
+              
                 organizationType: '', // Nouveau champ ajouté
            
                 domains: ''
@@ -69,10 +69,11 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                 <div className={styles.formContainer}>
                     <form className={styles.form} onSubmit={handleFormSubmit}>
                 <div className={styles.formGroup}>
-                    <label htmlFor="companyName">Company Name:</label>
+                  
                     <input
                         type="text"
                         id="companyName"
+                        placeholder="Client Name"
                         name="companyName"
                         value={formData.companyName}
                         onChange={handleChange}
@@ -80,10 +81,11 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                     />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="contactName">Contact Name:</label>
+                 
                     <input
                         type="text"
                         id="contactName"
+                        placeholder='Client Contact Name'
                         name="contactName"
                         value={formData.contactName}
                         onChange={handleChange}
@@ -91,9 +93,11 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                     />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="contactEmail">Contact Email:</label>
+              
                     <input
                         type="email"
+                        placeholder="Email"
+                        
                         id="contactEmail"
                         name="contactEmail"
                         value={formData.contactEmail}
@@ -102,10 +106,11 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                     />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="contactPhone">Contact Phone:</label>
+               
                     <input
                         type="tel"
                         id="contactPhone"
+                        placeholder="Phone"
                         name="contactPhone"
                         value={formData.contactPhone}
                         onChange={handleChange}
@@ -113,10 +118,11 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                     />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="clientLocation">Client Location:</label>
+                
                     <input
                         type="text"
                         id="clientLocation"
+                        placeholder='Location'
                         name="clientLocation"
                         value={formData.clientLocation}
                         onChange={handleChange}
@@ -124,10 +130,11 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                     />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="organizationType">Organization Type:</label>
+                
                     <select
                         id="organizationType"
                         name="organizationType"
+                        placeholder="Organization Type"
                         value={formData.organizationType}
                         onChange={handleChange}
                         className={styles.input}
@@ -141,27 +148,18 @@ const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetForm
                     </select>
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="clientAddress">Client Address:</label>
+                    
                     <input
                         type="text"
                         id="clientAddress"
+                        placeholder='Address'
                         name="clientAddress"
                         value={formData.clientAddress}
                         onChange={handleChange}
                         className={styles.input}
                     />
                 </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="azureTenantId">Azure Tenant ID:</label>
-                    <input
-                        type="text"
-                        id="azureTenantId"
-                        name="azureTenantId"
-                        value={formData.azureTenantId}
-                        onChange={handleChange}
-                        className={styles.input}
-                    />
-                </div>
+             
                 <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
                     {isSubmitting ? 'Submitting...' : (initialData ? 'Update' : 'Create')}
                 </button>

@@ -60,6 +60,10 @@ const clientSchema = new mongoose.Schema({
   street: String,
   technicalNotificationMails: [String],
   tenantType: String,
+  updatedTimestamp: {
+    type: Date,
+    default: Date.now,
+},
 
 });
 

@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'rsuite/dist/rsuite.min.css';
+
 :root {
     --bg: #ffffff00;
     --bgSoft: #182237;
@@ -10,7 +12,14 @@
     --textSoft: #687fb6;
     --text2 : #182237;
   }
-  
+  .container {
+    background-color: #182237; /* Dark blue background */
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    color: #ffffff; /* Text color set to white for better readability */
+}
+
   * {
     margin: 0;
     padding: 0;

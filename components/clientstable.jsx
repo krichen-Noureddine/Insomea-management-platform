@@ -9,20 +9,23 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
+  const [filterOption, setFilterOption] = useState('');
 
   const filteredClients = clients.filter(client =>
     (client.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       client.contactName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       client.contactEmail?.toLowerCase().includes(searchTerm.toLowerCase()))
+    && (filterOption === '' || client.someProperty === filterOption) // Adjust as per your data structure
   );
 
   useEffect(() => {
     console.log("ClientsTable clients prop:", clients);
+    setIsLoading(false); // No need to fetch data here since it's passed as a prop
   }, [clients]);
 
-  useEffect(() => {
-    setIsLoading(false); // No need to fetch data here since it's passed as a prop
-  }, []);
+  const handleFilterChange = (e) => {
+    setFilterOption(e.target.value);
+  };
 
   const promptDelete = (clientId) => {
     setShowDeletePopup(true);
@@ -68,16 +71,16 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
 
   return (
     <div className={styles.container}>
-      {/* Step 2: Search input */}
+      {/* Step 2: Search input and Filter dropdown */}
       <div className={styles.searchAndFilterBar}>
         <input
           type="text"
           placeholder="Search..."
           className={styles.searchInput}
+          value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {/* Example Filter Dropdown */}
-        <select className={styles.filterSelect}>
+        <select className={styles.filterSelect} value={filterOption} onChange={handleFilterChange}>
           <option value="">Filter by...</option>
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
@@ -85,7 +88,7 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
         </select>
         {/* PDF Export Button */}
         <button className={styles.pdfExportButton}>
-          Export 
+          Export
         </button>
       </div>
 
@@ -93,9 +96,7 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
         <DeleteConfirmationPopup
           isOpen={showDeletePopup}
           onClose={() => setShowDeletePopup(false)}
-          onConfirm={() => {
-            handleDelete(); // Now it uses the state clientIdToDelete for deletion
-          }}
+          onConfirm={handleDelete}
         />
         <table className={styles.table}>
           <thead>
@@ -105,8 +106,6 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
               <th>Contact Email</th>
               <th>Contact Phone</th>
               <th>Location</th>
-              <th>Adresse</th>
-              <th>Azure Tenant ID</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -123,8 +122,6 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
                 <td>{client.contactEmail}</td>
                 <td>{client.contactPhone}</td>
                 <td>{client.clientLocation}</td>
-                <td>{client.clientAdresse}</td>
-                <td>{client.azureTenantId}</td>
                 <td className={styles.buttons}>
                   <button
                     className={styles.button}
