@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../../styles/AzureSub.module.css';
-import AzureForm from '../../components/AzureSubForm';
 import ProviderForm from '@/components/ProviderForm';
 import AzureSubscriptionsTable from '@/components/subscriptionsList';
 import LoadingSpinner from '../../components/LoadingSpinner'; // Import the loading spinner
@@ -17,7 +16,7 @@ export default function AzureSubscriptionPage() {
 
     const fetchClientsAndCredentials = async () => {
         try {
-            setIsLoading(true); // Set loading to true before starting fetch
+            setIsLoading(true);
             const credentialsResponse = await fetch('http://localhost:3000/api/credentials');
             if (!credentialsResponse.ok) {
                 throw new Error('Failed to fetch credentials');
@@ -39,7 +38,7 @@ export default function AzureSubscriptionPage() {
             });
 
             setClients(mergedData);
-            setIsLoading(false); // Set loading to false after fetch completes
+            setIsLoading(false); 
         } catch (error) {
             console.error('Error fetching data:', error);
             setIsLoading(false); // Set loading to false if there is an error
@@ -53,7 +52,7 @@ export default function AzureSubscriptionPage() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/api/subscriptions?clientId=${clientId}`);
+            const response = await fetch(`http://localhost:3000/api/azure?clientId=${clientId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch Azure subscriptions');
             }

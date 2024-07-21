@@ -50,7 +50,6 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
     try {
       const response = await instance.acquireTokenSilent(accessTokenRequest);
       setAccessToken(response.accessToken);
-      console.log('Access Token:', response.accessToken);
     } catch (error) {
       console.error('Failed to acquire token silently:', error);
 
@@ -81,7 +80,7 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
       }
 
       const data = await response.json();
-      console.log('User Profiles:', data);
+     // console.log('User Profiles:', data);
       setUserProfiles(data);
     } catch (error) {
       console.error('Failed to fetch user profiles:', error);
@@ -103,7 +102,7 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
       }
   
       const data = await response.json();
-    console.log('Service Principal fetched successfully:', data.value);
+   // console.log('Service Principal fetched successfully:', data.value);
     return data.value; 
     } catch (error) {
       console.error('Error fetching service principals:', error);
@@ -124,7 +123,6 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
       }
   
       const data = await response.json();
-      console.log("approles",data.appRoles);
       return data.appRoles; // This contains the definitions of app roles.
     } catch (error) {
       console.error('Error fetching application app roles:', error);
@@ -132,15 +130,14 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
     }
   };
   function enrichAssignmentsWithRoleInfo(assignments, appRoles) {
-    console.log("Starting to enrich assignments with role information...");
   
     return assignments.map(assignment => {
       const roleDetail = appRoles.find(role => role.id === assignment.appRoleId);
-      if (roleDetail) {
-        console.log(`Found matching role for appRoleId ${assignment.appRoleId}: ${roleDetail.displayName}`);
-      } else {
-        console.log(`No matching role found for appRoleId ${assignment.appRoleId}.`);
-      }
+      // if (roleDetail) {
+      //   //console.log(`Found matching role for appRoleId ${assignment.appRoleId}: ${roleDetail.displayName}`);
+      // } else {
+      //   //console.log(`No matching role found for appRoleId ${assignment.appRoleId}.`);
+      // }
   
       return {
         ...assignment,
@@ -170,7 +167,6 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
           // Enrich assignments
           const enrichedAssignments = enrichAssignmentsWithRoleInfo(servicePrincipalRoles, applicationAppRoles);
           setEnrichedAssignments(enrichedAssignments);
-          console.log('Enriched Assignments:', enrichedAssignments);
           // Update state or perform additional actions with enriched assignments
         } catch (error) {
           console.error('Error during fetch and enrich process:', error);

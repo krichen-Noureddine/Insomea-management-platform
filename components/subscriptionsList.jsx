@@ -1,28 +1,12 @@
 import React, { useState } from 'react';
 import styles from '../styles/AzureList.module.css'; // Import your CSS module
-import Accordion from './Accordion';
 import LoadingSpinner from './LoadingSpinner';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 
 const AzureSubscriptionsTable = ({ clients, subscriptions, fetchSubscriptions }) => {
-    const [selectedClientId, setSelectedClientId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredClients, setFilteredClients] = useState(clients); // State to hold filtered clients
 
-    const toggleClient = async (clientId) => {
-        if (selectedClientId === clientId) {
-            setSelectedClientId(null);
-        } else {
-            setIsLoading(true);
-            await fetchSubscriptions(clientId);
-            setSelectedClientId(clientId);
-            setIsLoading(false);
-        }
-    };
-
-    // Function to handle search input change
     const handleSearchChange = (event) => {
         const searchTerm = event.target.value;
         setSearchTerm(searchTerm);
@@ -37,18 +21,18 @@ const AzureSubscriptionsTable = ({ clients, subscriptions, fetchSubscriptions })
     return (
         <div className={styles.container}>
             {/* Search and Filter Bar */}
-            <div className={`${styles.tableWrapper} ${styles.searchAndFilterBar}`}>
+            <div className={styles.searchAndFilterBar}>
                 {/* Search Input */}
                 <input
                     type="text"
-                    className={`${styles.searchInput} ${styles.formControl}`}
+                    className={styles.searchInput}
                     placeholder="Search by Company Name..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
                 
                 {/* Filter Select */}
-                <select className={`${styles.filterSelect} ${styles.formControl}`}>
+                <select className={styles.filterSelect1}>
                     <option value="">Filter by...</option>
                     <option value="name">Name</option>
                     <option value="date">Date</option>
@@ -56,44 +40,45 @@ const AzureSubscriptionsTable = ({ clients, subscriptions, fetchSubscriptions })
                 </select>
                 
                 {/* PDF Export Button */}
-                <button className={`${styles.pdfExportButton} ${styles.formControl}`}>Export to PDF</button>
+                <button className={styles.pdfExportButton}>Export to PDF</button>
             </div>
 
-            {/* Clients Section */}
+            {/* Clients and Subscriptions Table */}
             <div className={styles.tableWrapper}>
-                {filteredClients.map(client => (
-                    <div key={client.clientId} className={styles.clientSection}>
-                        <div className={styles.clientHeader} onClick={() => toggleClient(client.clientId)}>
-                            <div>
-                                <h3>Tenant Id: {client.tenantId}</h3>
-                                <h3>Company Name: {client.companyName}</h3>
-                            </div>
-                            <div className={styles.icon}>
-                                {selectedClientId === client.clientId ? (
-                                    <FontAwesomeIcon icon={faMinusCircle} />
-                                ) : (
-                                    <FontAwesomeIcon icon={faPlusCircle} />
-                                )}
-                            </div>
-                        </div>
-                        {selectedClientId === client.clientId && (
-                            isLoading ? (
-                                <LoadingSpinner />
-                            ) : (
-                                <div className={styles.subscriptionsList}>
-                                    {subscriptions
-                                        .filter(subscription => subscription.clientId === client.clientId)
-                                        .map(subscription => (
-                                            <Accordion
-                                                key={subscription.subscriptionId}
-                                                subscription={subscription}
-                                                onRefresh={() => fetchSubscriptions(client.clientId)}
-                                            />
-                                        ))}
-                                </div>
-                            ))}
-                    </div>
-                ))}
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>Tenant Id</th>
+                            <th>Company Name</th>
+                            <th>Subscription Name</th>
+                            <th>Azure Offer</th>
+                            <th>Status</th>
+                            <th>Subscription Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {isLoading ? (
+                            <tr>
+                                <td colSpan="6"><LoadingSpinner /></td>
+                            </tr>
+                        ) : (
+                            filteredClients.flatMap(client => 
+                                subscriptions
+                                    .filter(subscription => subscription.clientId === client.clientId)
+                                    .map(subscription => (
+                                        <tr key={subscription.subscriptionId}>
+                                            <td>{client.tenantId}</td>
+                                            <td>{client.companyName}</td>
+                                            <td>{subscription.subscriptionName}</td>
+                                            <td>{subscription.azureOffer}</td>
+                                            <td>{subscription.status}</td>
+                                            <td>{subscription.subscriptionId}</td>
+                                        </tr>
+                                    ))
+                            )
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

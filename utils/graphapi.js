@@ -7,7 +7,7 @@ const acquireGraphApiToken = async (instance) => {
     });
 
     const accessToken = authResult.accessToken; // Access token for Microsoft Graph API
-    console.log('Access Token:', accessToken); // Log the access token to the console
+    //console.log('Access Token:', accessToken); // Log the access token to the console
     return accessToken;
   } catch (error) {
     console.error('Error acquiring token:', error);
