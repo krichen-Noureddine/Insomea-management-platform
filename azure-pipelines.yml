@@ -1,6 +1,6 @@
-
 trigger:
 - main
+
 pool:
   name: Default
   demands:
@@ -15,24 +15,24 @@ steps:
 # Cache node_modules
 - task: Cache@2
   inputs:
-    key: 'npm | "$(Agent.OS)" | package-lock.json'
+    key: 'npm | $(Agent.OS) | package-lock.json'
     path: '$(Pipeline.Workspace)/node_modules'
     restoreKeys: |
-      npm | "$(Agent.OS)"
+      npm | $(Agent.OS)
   displayName: 'Cache node_modules'
-
-- script: |
-    npm install
-  displayName: 'Install dependencies'
 
 # Cache Next.js build cache
 - task: Cache@2
   inputs:
-    key: 'nextjs | "$(Agent.OS)" | .next/cache'
-    path: '.next/cache'
+    key: 'next | $(Agent.OS) | package-lock.json'
+    path: '$(Pipeline.Workspace)/.next/cache'
     restoreKeys: |
-      nextjs | "$(Agent.OS)"
-  displayName: 'Cache Next.js build cache'
+      next | $(Agent.OS)
+  displayName: 'Cache .next/cache'
+
+- script: |
+    npm install
+  displayName: 'Install dependencies'
 
 - script: |
     npm run build
