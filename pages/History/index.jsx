@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import { DateRangePicker } from 'rsuite';
@@ -11,31 +11,19 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
     subscriptionName: '',
     startDate: '',
     endDate: '',
-    clientId: '' // Added clientId here
+    clientId: ''
   });
-  const [companyNames, setCompanyNames] = useState(initialCompanyNames); 
+  const [companyNames, setCompanyNames] = useState(initialCompanyNames);
   const [subscriptionNames, setSubscriptionNames] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState(initialRecords);
   const [dateRange, setDateRange] = useState([null, null]);
   const [sortCriteria, setSortCriteria] = useState('');
 
   const predefinedRanges = [
-    {
-      label: 'Today',
-      value: [startOfDay(new Date()), endOfDay(new Date())],
-    },
-    {
-      label: 'Yesterday',
-      value: [startOfDay(subDays(new Date(), 1)), endOfDay(subDays(new Date(), 1))],
-    },
-    {
-      label: 'Last 7 Days',
-      value: [startOfDay(subDays(new Date(), 6)), endOfDay(new Date())],
-    },
-    {
-      label: 'This Month',
-      value: [startOfDay(new Date(new Date().getFullYear(), new Date().getMonth(), 1)), endOfDay(new Date())],
-    },
+    { label: 'Today', value: [startOfDay(new Date()), endOfDay(new Date())] },
+    { label: 'Yesterday', value: [startOfDay(subDays(new Date(), 1)), endOfDay(subDays(new Date(), 1))] },
+    { label: 'Last 7 Days', value: [startOfDay(subDays(new Date(), 6)), endOfDay(new Date())] },
+    { label: 'This Month', value: [startOfDay(new Date(new Date().getFullYear(), new Date().getMonth(), 1)), endOfDay(new Date())] },
   ];
 
   useEffect(() => {
@@ -57,13 +45,50 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
     }
   }, [filters.clientId]);
 
+  const fetchSubscriptionNames = useCallback(async (clientId) => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/azure', {
+        params: { clientId }
+      });
+
+      const names = response.data.map(subscription => ({
+        label: subscription.subscriptionName,
+        value: subscription.subscriptionName
+      }));
+
+      setSubscriptionNames(names || []);
+
+      if (names.length > 0) {
+        setFilters(prevFilters => ({
+          ...prevFilters,
+          subscriptionName: names[0].value,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching subscription names:', error);
+    }
+  }, []);
+
+  const fetchHistoriqueRecords = useCallback(async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/historique', {
+        params: filters,
+      });
+      const { historiqueRecords } = response.data;
+      setFilteredRecords(historiqueRecords || []);
+    } catch (error) {
+      console.error('Error fetching historique data:', error);
+      setFilteredRecords([]);
+    }
+  }, [filters]);
+
   useEffect(() => {
     if (!filters.companyName || !filters.subscriptionName) {
       setFilteredRecords([]);
     } else {
       fetchHistoriqueRecords();
     }
-  }, [filters]);
+  }, [filters, fetchHistoriqueRecords]);
 
   useEffect(() => {
     if (filteredRecords.length > 0 && sortCriteria) {
@@ -81,48 +106,6 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
     }
   }, [sortCriteria, filteredRecords]);
 
-  const fetchSubscriptionNames = async (clientId) => {
-    try {
-      console.log('Fetching subscription names for clientId:', clientId);
-      const response = await axios.get('http://localhost:3000/api/azure', {
-        params: { clientId }
-      });
-      console.log('API Response:', response.data);
-
-      // Process the response data
-      const names = response.data.map(subscription => ({
-        label: subscription.subscriptionName,
-        value: subscription.subscriptionName
-      }));
-      console.log('Subscription names fetched:', names);
-
-      setSubscriptionNames(names || []);
-
-      // Set the first subscription as the default filter if available
-      if (names.length > 0) {
-        setFilters(prevFilters => ({
-          ...prevFilters,
-          subscriptionName: names[0].value,
-        }));
-      }
-    } catch (error) {
-      console.error('Error fetching subscription names:', error);
-    }
-  };
-
-  const fetchHistoriqueRecords = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/historique', {
-        params: filters,
-      });
-      const { historiqueRecords } = response.data;
-      setFilteredRecords(historiqueRecords || []);
-    } catch (error) {
-      console.error('Error fetching historique data:', error);
-      setFilteredRecords([]);
-    }
-  };
-
   const handleFilterChange = (selectedOption, actionMeta) => {
     const { name } = actionMeta;
     const value = selectedOption ? selectedOption.value : '';
@@ -130,7 +113,7 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
     setFilters(prevFilters => ({
       ...prevFilters,
       [name]: value,
-      clientId: name === 'companyName' ? selectedOption?.clientId || '' : prevFilters.clientId // Update clientId based on company selection
+      clientId: name === 'companyName' ? selectedOption?.clientId || '' : prevFilters.clientId
     }));
   };
 
@@ -145,9 +128,7 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
 
   const handleExportCSV = async () => {
     try {
-      const response = await axios.post('api/exportCSV', {
-        filters
-      });
+      const response = await axios.post('api/exportCSV', { filters });
 
       if (response.data && response.data.csvUrl) {
         const csvLink = document.createElement('a');
@@ -156,7 +137,6 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
         document.body.appendChild(csvLink);
         csvLink.click();
         document.body.removeChild(csvLink);
-        console.log('CSV exported successfully:', response.data);
       } else {
         console.error('Error exporting CSV: Invalid response from server');
       }
@@ -203,7 +183,7 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
           onChange={handleFilterChange}
           options={subscriptionNames}
           isClearable
-          isDisabled={!filters.clientId} // Disable if no clientId
+          isDisabled={!filters.clientId}
           placeholder="Select Subscription"
         />
 
@@ -236,9 +216,9 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
         <table className={styles.table}>
           <thead>
             <tr>
-              <th colSpan={5}></th> {/* Empty columns for the other headers */}
+              <th colSpan={5}></th>
               <th className={styles.totalCostHeader}>Total Cost: ${calculateTotalCost()}</th>
-              <th></th> {/* Empty column for the last header */}
+              <th></th>
             </tr>
             <tr>
               <th>Service</th>
