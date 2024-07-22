@@ -5,7 +5,7 @@ import { DateRangePicker } from 'rsuite';
 import { subDays, startOfDay, endOfDay } from 'date-fns';
 import styles from "@/styles/Historique.module.css";
 
-const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
+const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initialCompanyNames, error }) => {
   const [filters, setFilters] = useState({
     companyName: '',
     subscriptionName: '',
@@ -13,7 +13,7 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
     endDate: '',
     clientId: '' // Added clientId here
   });
-  const [companyNames, setCompanyNames] = useState([]);
+  const [companyNames, setCompanyNames] = useState(initialCompanyNames); 
   const [subscriptionNames, setSubscriptionNames] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState(initialRecords);
   const [dateRange, setDateRange] = useState([null, null]);
@@ -39,11 +39,6 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
   ];
 
   useEffect(() => {
-    fetchCompanyNames();
-  }, []);
-
-  useEffect(() => {
-    console.log('filters.clientId changed:', filters.clientId);
     if (filters.clientId) {
       fetchSubscriptionNames(filters.clientId);
     } else {
@@ -75,32 +70,6 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
     }
   }, [sortCriteria, filteredRecords]);
 
-  const fetchCompanyNames = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/clients');
-      
-      const names = response.data.map(company => ({
-        label: company.companyName,
-        value: company.companyName,
-        clientId: company._id // Ensure clientId is included
-      }));
-      console.log('Company names fetched:', names);
-  
-      setCompanyNames(names || []);
-  
-      if (names.length > 0 && !filters.companyName) {
-        const firstCompany = names[0];
-        setFilters(prevFilters => ({
-          ...prevFilters,
-          companyName: firstCompany.value,
-          clientId: firstCompany.clientId // Set clientId here
-        }));
-      }
-    } catch (error) {
-      console.error('Error fetching company names:', error);
-    }
-  };
-  
   const fetchSubscriptionNames = async (clientId) => {
     try {
       console.log('Fetching subscription names for clientId:', clientId);
@@ -108,16 +77,16 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
         params: { clientId }
       });
       console.log('API Response:', response.data);
-  
+
       // Process the response data
       const names = response.data.map(subscription => ({
         label: subscription.subscriptionName,
         value: subscription.subscriptionName
       }));
       console.log('Subscription names fetched:', names);
-  
+
       setSubscriptionNames(names || []);
-  
+
       // Set the first subscription as the default filter if available
       if (names.length > 0) {
         setFilters(prevFilters => ({
@@ -129,7 +98,7 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
       console.error('Error fetching subscription names:', error);
     }
   };
-  
+
   const fetchHistoriqueRecords = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/historique', {
@@ -216,17 +185,16 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
           placeholder="Select Company Name"
         />
 
-<Select
-  className={styles.filterSelect1}
-  name="subscriptionName"
-  value={subscriptionNames.find(option => option.value === filters.subscriptionName)}
-  onChange={handleFilterChange}
-  options={subscriptionNames}
-  isClearable
-  isDisabled={!filters.clientId} // Disable if no clientId
-  placeholder="Select Subscription"
-/>
-
+        <Select
+          className={styles.filterSelect1}
+          name="subscriptionName"
+          value={subscriptionNames.find(option => option.value === filters.subscriptionName)}
+          onChange={handleFilterChange}
+          options={subscriptionNames}
+          isClearable
+          isDisabled={!filters.clientId} // Disable if no clientId
+          placeholder="Select Subscription"
+        />
 
         <DateRangePicker
           className={`${styles.filterSelect1} `}
@@ -250,64 +218,72 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, error }) => {
       </div>
 
       <div className={styles.totalCostContainer}>
-  <span>Total Cost: ${calculateTotalCost()}</span>
-</div>
+        <span>Total Cost: ${calculateTotalCost()}</span>
+      </div>
 
-<div className={styles.tableContainer}>
-  <table className={styles.table}>
-    <thead>
-      <tr>
-        <th colSpan={5}></th> {/* Empty columns for the other headers */}
-        <th className={styles.totalCostHeader}>Total Cost: ${calculateTotalCost()}</th>
-        <th></th> {/* Empty column for the last header */}
-      </tr>
-      <tr>
-        <th>Service</th>
-        <th>Date</th>
-        <th>Resource Location</th>
-        <th>Category</th>
-        <th>Usage</th>
-        <th>Cost</th>
-        <th>Currency</th>
-      </tr>
-    </thead>
-    <tbody>
-      {filteredRecords.map(record => (
-        <tr key={record._id} className={styles.tableRow}>
-          <td>{record.service}</td>
-          <td>{new Date(record.date).toLocaleDateString()}</td>
-          <td>{record.resource_location}</td>
-          <td>{record.category}</td>
-          <td>{parseFloat(record.usage).toFixed(3)}</td>
-          <td>{parseFloat(record.cost).toFixed(3)}</td>
-          <td>{record.currency}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th colSpan={5}></th> {/* Empty columns for the other headers */}
+              <th className={styles.totalCostHeader}>Total Cost: ${calculateTotalCost()}</th>
+              <th></th> {/* Empty column for the last header */}
+            </tr>
+            <tr>
+              <th>Service</th>
+              <th>Date</th>
+              <th>Resource Location</th>
+              <th>Category</th>
+              <th>Usage</th>
+              <th>Cost</th>
+              <th>Currency</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredRecords.map(record => (
+              <tr key={record._id} className={styles.tableRow}>
+                <td>{record.service}</td>
+                <td>{new Date(record.date).toLocaleDateString()}</td>
+                <td>{record.resource_location}</td>
+                <td>{record.category}</td>
+                <td>{parseFloat(record.usage).toFixed(3)}</td>
+                <td>{parseFloat(record.cost).toFixed(3)}</td>
+                <td>{record.currency}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
 export async function getServerSideProps(context) {
   try {
-    const res = await axios.get('http://localhost:3000/api/historique');
-    const { historiqueRecords } = res.data;
+    const historiqueResponse = await axios.get('http://localhost:3000/api/historique');
+    const { historiqueRecords } = historiqueResponse.data;
+
+    const companyResponse = await axios.get('http://localhost:3000/api/clients');
+    const companyNames = companyResponse.data.map(company => ({
+      label: company.companyName,
+      value: company.companyName, 
+      clientId: company._id // Ensure clientId is included
+    }));
 
     return {
       props: {
         historiqueRecords: historiqueRecords || [],
+        companyNames: companyNames || [],
         error: null,
       },
     };
   } catch (error) {
-    console.error('Error fetching historique data:', error);
+    console.error('Error fetching data:', error);
 
     return {
       props: {
         historiqueRecords: [],
+        companyNames: [],
         error: 'Failed to load data',
       },
     };

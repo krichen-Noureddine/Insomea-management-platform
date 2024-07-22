@@ -7,6 +7,7 @@ const subscriptionSchema = new mongoose.Schema({
   clientId: { type: String, required: true },
   subscriptionName: { type: String },
   serviceType: { type: String },
+  tenantId:{type : String},
   subscriptionStartDate: { type: Date },
   resources: { type: Array, default: [] },
   costEstimate: { type: Number, default: 0 },
@@ -25,6 +26,7 @@ const subscriptionSchema = new mongoose.Schema({
   purchaseOrderNumber: { type: String },
   authorizationSource: { type: String },
   subscriptionPolicies: { type: Object },
+  provisioningState: {type:Object}
 });
 
 const Subscription = mongoose.models.Subscription || mongoose.model('Subscription', subscriptionSchema);

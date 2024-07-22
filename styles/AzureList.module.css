@@ -31,40 +31,33 @@
     background-color: #44b49d;
   }
   
-  /* Search and filter bar styling */
   .searchAndFilterBar {
     display: flex;
-    padding: 1px;
+    /* Space out search, filter, and PDF export button */
+    padding: 10px;
     margin-bottom: 20px;
-    max-height: 50px;
-  }
-  
-  .searchInput,
-  .filterSelect1 {
-    padding: 5px; /* Adjust padding as needed */
-    margin-right: 10px; /* Adjust margin as needed */
-    border-radius: 10px;
-    background-color: var(--bg); /* Adjust as needed */
-    color: rgb(0, 0, 0); /* Adjust text color as needed */
-    width: 250px; /* Set a fixed width */
-  }
-  
-  .filterSelect1 option {
-    background-color: #ffffff; /* Dark blue background */
-    color: rgb(0, 0, 0); /* Text color set to black for readability */
-  }
-  
-  .pdfExportButton {
+    
+}
+
+.searchInput, .filterSelect {
+    padding: 8px;
+    margin-right: 10px; /* Space between search/filter and the button */
+    border: 3px solid #128C8B;
+    border-radius: 20px;
+    background-color: var(--bg);
+   
+}
+
+.pdfExportButton {
     padding: 8px 20px;
     background-color: #128C8B; /* Example color, choose what fits your design */
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-  }
-  
-  .searchInput::placeholder {
+}
+.searchInput::placeholder {
     color: white; /* Change #888 to whatever color you prefer */
     opacity: 1; /* Ensures the color is not transparent; adjust as needed */
-  }
+}
   

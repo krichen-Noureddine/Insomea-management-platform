@@ -3,6 +3,7 @@ import { SubscriptionClient } from "@azure/arm-subscriptions";
 import clientPromise from "@/database/mongodb";
 import { Credentials } from "@/model/Credentials";
 import Subscription from "@/model/azureSub";
+
 export default async function handler(req, res) {
   const { clientId } = req.query;
 
@@ -11,7 +12,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Connect to the database and fetch credentials by clientId
     const client = await clientPromise;
     const db = client.connection.db;
     const credentials = await Credentials.findOne({ clientId: String(clientId) });
@@ -22,27 +22,28 @@ export default async function handler(req, res) {
 
     const { tenantId, azureClientId, clientSecret } = credentials;
 
-    // Authenticate with Azure using the fetched credentials
     const credential = new ClientSecretCredential(
       tenantId,
       azureClientId,
       clientSecret,
       {
-        allowInsecureConnection: true // Add this option if needed
+        allowInsecureConnection: true 
       }
     );
 
     const subscriptionClient = new SubscriptionClient(credential);
     const subscriptionDetails = [];
 
-    console.log("Fetching subscriptions...");
+  
 
-    // Asynchronously iterate through all subscription pages
     for await (const item of subscriptionClient.subscriptions.list()) {
-      console.log(`Found subscription: ${item.subscriptionId} (${item.displayName})`);
+
+      const subscription = await subscriptionClient.subscriptions.get(item.subscriptionId);
+      
       const azureSubscription = {
         subscriptionId: item.subscriptionId,
         clientId: clientId,
+        tenantId: tenantId, // Adding tenantId
         subscriptionName: item.displayName,
         status: item.state,
         tags: item.tags,
@@ -50,7 +51,9 @@ export default async function handler(req, res) {
         azureProvider: item.authorizationSource,
         authorizationSource: item.authorizationSource,
         subscriptionPolicies: item.subscriptionPolicies,
+        provisioningState: subscription.provisioningState // Adding provisioning state
       };
+
       subscriptionDetails.push(azureSubscription);
     }
 

@@ -2,91 +2,69 @@ import React, { useState, useEffect } from 'react';
 import styles from '../../styles/AzureSub.module.css';
 import ProviderForm from '@/components/ProviderForm';
 import AzureSubscriptionsTable from '@/components/subscriptionsList';
-import LoadingSpinner from '../../components/LoadingSpinner'; // Import the loading spinner
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function AzureSubscriptionPage() {
     const [activeComponent, setActiveComponent] = useState('anotherForm');
     const [subscriptions, setSubscriptions] = useState([]);
-    const [clients, setClients] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        fetchClientsAndCredentials();
+        fetchSubscriptions();
     }, []);
 
-    const fetchClientsAndCredentials = async () => {
+    const fetchSubscriptions = async () => {
         try {
-            setIsLoading(true);
-            const credentialsResponse = await fetch('http://localhost:3000/api/credentials');
-            if (!credentialsResponse.ok) {
-                throw new Error('Failed to fetch credentials');
+            const response = await fetch('http://localhost:3000/api/azure');
+            if (!response.ok) {
+                throw new Error('Failed to fetch subscriptions');
             }
-            const credentialsData = await credentialsResponse.json();
-
-            const clientsResponse = await fetch('http://localhost:3000/api/clients');
-            if (!clientsResponse.ok) {
-                throw new Error('Failed to fetch clients');
+            const subscriptionsData = await response.json();
+            console.log('Subscriptions Data:', subscriptionsData);
+    
+            if (!Array.isArray(subscriptionsData)) {
+                throw new Error('Unexpected response structure');
             }
-            const clientsData = await clientsResponse.json();
-
-            const mergedData = credentialsData.map(credential => {
-                const clientInfo = clientsData.find(client => client._id === credential.clientId);
+    
+            const clientDetailsPromises = subscriptionsData.map(async (subscription) => {
+                const clientResponse = await fetch(`http://localhost:3000/api/clients/${subscription.clientId}`);
+                if (!clientResponse.ok) {
+                    throw new Error(`Failed to fetch client with ID: ${subscription.clientId}`);
+                }
+                const clientData = await clientResponse.json();
+                console.log('Client Data:', clientData);
                 return {
-                    ...credential,
-                    companyName: clientInfo ? clientInfo.companyName : 'Unknown',
+                    ...subscription,
+                    companyName: clientData.companyName,
                 };
             });
-
-            setClients(mergedData);
-            setIsLoading(false); 
+    
+            const subscriptionsWithClientDetails = await Promise.all(clientDetailsPromises);
+            setSubscriptions(subscriptionsWithClientDetails);
         } catch (error) {
-            console.error('Error fetching data:', error);
-            setIsLoading(false); // Set loading to false if there is an error
+            console.error('Error fetching subscriptions:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
-
-    const fetchSubscriptions = async (clientId) => {
-        try {
-            if (!clientId) {
-                console.error('No clientId provided to fetch subscriptions.');
-                return;
-            }
-
-            const response = await fetch(`http://localhost:3000/api/azure?clientId=${clientId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch Azure subscriptions');
-            }
-            const data = await response.json();
-
-            setSubscriptions(prevSubscriptions => {
-                const updatedSubscriptions = [
-                    ...prevSubscriptions.filter(sub => sub.clientId !== clientId),
-                    ...data.value
-                ];
-                return updatedSubscriptions;
-            });
-        } catch (error) {
-            console.error(`Error fetching subscriptions for client ID: ${clientId}:`, error);
-        }
-    };
+    
 
     const handleComponentSwitch = (componentName) => {
         setActiveComponent(componentName);
     };
 
     if (isLoading) {
-        return <LoadingSpinner />; // Show loading spinner if data is loading
+        return <LoadingSpinner />;
     }
 
     return (
         <div className={styles.container}>
             <div className={styles.buttonBar}>
-               
                 <button
                     className={`${styles.button} ${activeComponent === 'anotherForm' && styles.active}`}
                     onClick={() => handleComponentSwitch('anotherForm')}
                 >
-                     Azure Subscriptions
+                    Azure Subscriptions
                 </button>
                 <button
                     className={`${styles.button} ${activeComponent === 'Provider' && styles.active}`}
@@ -96,13 +74,8 @@ export default function AzureSubscriptionPage() {
                 </button>
             </div>
             <div>
-             
                 {activeComponent === 'anotherForm' && (
-                    <AzureSubscriptionsTable
-                        clients={clients}
-                        subscriptions={subscriptions}
-                        fetchSubscriptions={fetchSubscriptions}
-                    />
+                    <AzureSubscriptionsTable subscriptions={subscriptions} />
                 )}
                 {activeComponent === 'Provider' && <ProviderForm />}
             </div>
