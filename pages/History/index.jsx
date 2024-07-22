@@ -39,6 +39,17 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
   ];
 
   useEffect(() => {
+    if (initialCompanyNames.length > 0) {
+      const firstCompany = initialCompanyNames[0];
+      setFilters(prevFilters => ({
+        ...prevFilters,
+        companyName: firstCompany.value,
+        clientId: firstCompany.clientId
+      }));
+    }
+  }, [initialCompanyNames]);
+
+  useEffect(() => {
     if (filters.clientId) {
       fetchSubscriptionNames(filters.clientId);
     } else {
@@ -260,14 +271,16 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
 
 export async function getServerSideProps(context) {
   try {
-    const historiqueResponse = await axios.get('http://localhost:3000/api/historique');
-    const { historiqueRecords } = historiqueResponse.data;
+    const [historiqueResponse, companyResponse] = await Promise.all([
+      axios.get('http://localhost:3000/api/historique'),
+      axios.get('http://localhost:3000/api/clients'),
+    ]);
 
-    const companyResponse = await axios.get('http://localhost:3000/api/clients');
+    const { historiqueRecords } = historiqueResponse.data;
     const companyNames = companyResponse.data.map(company => ({
       label: company.companyName,
       value: company.companyName, 
-      clientId: company._id // Ensure clientId is included
+      clientId: company._id
     }));
 
     return {
