@@ -21,15 +21,6 @@ steps:
       npm | $(Agent.OS)
   displayName: 'Cache node_modules'
 
-- script: |
-    npm install
-  displayName: 'Install dependencies'
-
-# Ensure .next/cache directory exists
-- script: |
-    mkdir -p $(Pipeline.Workspace)/.next/cache
-  displayName: 'Ensure .next/cache directory exists'
-
 # Cache Next.js build cache
 - task: Cache@2
   inputs:
@@ -38,6 +29,10 @@ steps:
     restoreKeys: |
       next | $(Agent.OS)
   displayName: 'Cache .next/cache'
+
+- script: |
+    npm install
+  displayName: 'Install dependencies'
 
 - script: |
     npm run build
