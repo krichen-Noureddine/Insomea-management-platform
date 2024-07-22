@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  Card, CardContent, Typography, Grid, List, ListItem, ListItemText,
+   Typography, Grid, List, ListItem, ListItemText,
   Box, Chip, Accordion, AccordionSummary, AccordionDetails, Avatar, Divider, Paper
 } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
 import { FaRegCheckCircle, FaRegTimesCircle, FaInfoCircle, FaCalendarAlt } from 'react-icons/fa';
-import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
 import Link from 'next/link';
 
 const Mo365Details = ({ subscription }) => {

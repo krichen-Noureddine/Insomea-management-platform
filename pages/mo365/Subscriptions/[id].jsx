@@ -1,4 +1,3 @@
-// pages/mo365/subscriptions/[id].jsx
 import React from 'react';
 import Mo365Details from '@/components/mo365Details';
 
@@ -14,12 +13,13 @@ export async function getServerSideProps({ params }) {
     const { id } = params;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/mo365/${id}`);
+        // Ensure the correct URL is used for your API route
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/mo365/${id}`);
         if (!response.ok) {
             throw new Error('Failed to fetch subscription details');
         }
         const data = await response.json();
-console.log(data);
+
         return {
             props: {
                 subscription: data,

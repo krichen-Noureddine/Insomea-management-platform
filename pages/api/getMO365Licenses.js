@@ -69,7 +69,7 @@ export default async function handler(req, res) {
         const licenses = await getMO365Licenses(token);
         for (const licenseData of licenses) {
           await License.updateOne(
-            { id: licenseData.id },
+            { _id: licenseData.id },
             {
               $set: {
                 ...licenseData,

@@ -8,19 +8,17 @@ import {
   MdDashboard,
   MdSupervisedUserCircle,
   MdShoppingBag,
-  MdAttachMoney,
+  
   MdWork,
   MdAnalytics,
-  MdPeople,
+
   MdOutlineSettings,
   MdHelpCenter,
   MdLogout,
-  MdPersonOutline,
 } from "react-icons/md";
 import { HiBellAlert } from "react-icons/hi2";
 import { GrLicense } from "react-icons/gr";
 import { FaUsers } from "react-icons/fa6";
-import { FaHistory } from "react-icons/fa";
 import { FaSignInAlt } from 'react-icons/fa';
 import { FaUser } from "react-icons/fa";
 

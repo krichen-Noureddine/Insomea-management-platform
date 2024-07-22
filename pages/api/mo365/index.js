@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+//mo365/index.js
 import clientPromise from '../../../database/mongodb';
 
 export default async function handler(req, res) {

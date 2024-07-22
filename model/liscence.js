@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const ServicePlanSchema = new mongoose.Schema({
   servicePlanId: String,
@@ -21,7 +21,7 @@ const LicenseSchema = new mongoose.Schema({
   appliesTo: String,
   capabilityStatus: String,
   consumedUnits: Number,
-  id: { type: String, required: true, unique: true },
+  _id: { type: String, required: true }, // Use _id as the primary key
   skuId: String,
   skuPartNumber: String,
   subscriptionIds: [String],
@@ -38,4 +38,4 @@ const LicenseSchema = new mongoose.Schema({
 
 const License = mongoose.models.License || mongoose.model('License', LicenseSchema);
 
-module.exports = License;
+export default License;
