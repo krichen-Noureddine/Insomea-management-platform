@@ -1,3 +1,4 @@
+// _app.js
 import React from 'react';
 import App from 'next/app';
 import Layout from '../components/layout';
@@ -6,7 +7,9 @@ import { MsalProvider } from '@azure/msal-react';
 import { msalInstance } from '../utils/msalConfig';
 import { NotificationProvider } from '@/components/Notification';
 import ProtectedRoute from '@/components/needAuth';
-import "../scripts/start-scheduler";
+
+// Import the cron job
+
 class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
