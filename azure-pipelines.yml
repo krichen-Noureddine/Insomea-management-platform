@@ -8,7 +8,7 @@ pool:
 
 variables:
   - name: MONGODB_URI
-    value: $(MONGODB_URI)
+    value: $(MONGODB_URI) # Ensure this is set correctly in the pipeline settings
 
 steps:
 - task: NodeTool@0
@@ -16,24 +16,19 @@ steps:
     versionSpec: '20.15.0'
   displayName: 'Install Node.js'
 
-# Cache Next.js build cache
-- task: Cache@2
-  displayName: 'Cache .next/cache'
-  inputs:
-    key: 'next | $(Agent.OS) | package-lock.json'
-    path: '$(System.DefaultWorkingDirectory)/.next/cache'
-    restoreKeys: |
-      next | $(Agent.OS)
+- script: |
+    echo "MONGODB_URI is: $(MONGODB_URI)" # This step will print the MongoDB URI for debugging
+  displayName: 'Print MongoDB URI'
 
 - script: |
-    npm install
+    npm install # Install dependencies
   displayName: 'Install dependencies'
 
 - script: |
-    npm run lint
+    npm run lint # Run lint checks
   displayName: 'Run lint'
 
 # Add the scheduler script step
 - script: |
-    npm run start-scheduler
+    npm run start-scheduler # Run the scheduler script
   displayName: 'Run scheduler script'
