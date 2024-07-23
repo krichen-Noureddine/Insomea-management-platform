@@ -6,9 +6,7 @@ pool:
   demands:
   - agent.name -equals DESKTOP-LV6N60A
 
-variables:
-  - name: MONGODB_URI
-    value: $(MONGODB_URI) # Ensure this is set correctly in the pipeline settings
+
 
 steps:
 - task: NodeTool@0
@@ -17,18 +15,17 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    echo "MONGODB_URI is: $(MONGODB_URI)" # This step will print the MongoDB URI for debugging
+    echo "MONGODB_URI is set." # Note: This will not print the actual value due to secret masking
   displayName: 'Print MongoDB URI'
 
 - script: |
-    npm install # Install dependencies
+    npm install
   displayName: 'Install dependencies'
 
 - script: |
-    npm run lint # Run lint checks
+    npm run lint
   displayName: 'Run lint'
 
-# Add the scheduler script step
 - script: |
-    npm run start-scheduler # Run the scheduler script
+    npm run start-scheduler
   displayName: 'Run scheduler script'
