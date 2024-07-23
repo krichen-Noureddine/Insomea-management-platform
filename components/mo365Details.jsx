@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-   Typography, Grid, List, ListItem, ListItemText,
+  Typography, Grid, List, ListItem, ListItemText,
   Box, Chip, Accordion, AccordionSummary, AccordionDetails, Avatar, Divider, Paper
 } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
-import { FaRegCheckCircle, FaRegTimesCircle, FaInfoCircle, FaCalendarAlt } from 'react-icons/fa';
-import Link from 'next/link';
+import { CheckCircle, Cancel, Info, CalendarToday } from '@mui/icons-material';
 
 const Mo365Details = ({ subscription }) => {
   return (
@@ -33,7 +32,7 @@ const Mo365Details = ({ subscription }) => {
 
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Typography variant="subtitle1"><FaInfoCircle /> Account Details</Typography>
+            <Typography variant="subtitle1"><Info /> Account Details</Typography>
             <List>
               <ListItem>
                 <ListItemText primary="Account ID" secondary={subscription.accountId || 'N/A'} />
@@ -59,7 +58,7 @@ const Mo365Details = ({ subscription }) => {
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant="subtitle1"><FaCalendarAlt /> Key Dates</Typography>
+            <Typography variant="subtitle1"><CalendarToday /> Key Dates</Typography>
             <List>
               <ListItem>
                 <ListItemText primary="Created Date" secondary={new Date(subscription.createdDateTime).toLocaleDateString()} />
@@ -90,11 +89,11 @@ const Mo365Details = ({ subscription }) => {
                       />
                       {plan.provisioningStatus === 'Success' ? (
                         <Avatar sx={{ bgcolor: 'success.main' }}>
-                          <FaRegCheckCircle />
+                          <CheckCircle />
                         </Avatar>
                       ) : (
                         <Avatar sx={{ bgcolor: 'error.main' }}>
-                          <FaRegTimesCircle />
+                          <Cancel />
                         </Avatar>
                       )}
                     </ListItem>
@@ -104,12 +103,6 @@ const Mo365Details = ({ subscription }) => {
             </Accordion>
           </Grid>
         </Grid>
-
-        <Box sx={{ marginTop: 3 }}>
-          <Link href="/mo365" passHref>
-            <Chip label="Back to Subscriptions" color="primary" clickable component="a" />
-          </Link>
-        </Box>
       </Paper>
     </Box>
   );

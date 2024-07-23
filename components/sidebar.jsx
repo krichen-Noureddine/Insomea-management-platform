@@ -8,7 +8,7 @@ import {
   MdDashboard,
   MdSupervisedUserCircle,
   MdShoppingBag,
-  
+  MdAttachMoney,
   MdWork,
   MdAnalytics,
 

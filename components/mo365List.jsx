@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Mo365List.module.css';
-import { FaInfoCircle } from 'react-icons/fa';
+import { Info } from '@mui/icons-material';
 
 const Mo365List = ({ subscriptions }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -66,8 +66,8 @@ const Mo365List = ({ subscriptions }) => {
                             <td>{new Date(subscription.createdDateTime).toLocaleDateString()}</td>
                             <td>{subscription.nextLifecycleDateTime ? new Date(subscription.nextLifecycleDateTime).toLocaleDateString() : 'N/A'}</td>
                             <td>
-                                <Link href={`/mo365/Subscriptions/${subscription._id}`} passHref>
-                                    <div className={styles.detailsButton}><FaInfoCircle /> View Details</div>
+                                <Link href={`/mo365/${subscription._id}`} passHref>
+                                    <div className={styles.detailsButton}><Info/> View Details</div>
                                 </Link>
                             </td>
                         </tr>

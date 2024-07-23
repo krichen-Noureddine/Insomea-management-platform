@@ -1,7 +1,7 @@
 // components/Navbar.js
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { MdNotifications, MdOutlineChat, MdPublic, MdSearch } from "react-icons/md";
+import { Notifications as MUINotifications, Chat as MUIChat, Public as MUIPublic, Search as MUISearch } from "@mui/icons-material";
 import { useNotification } from "./Notification";
 import styles from "../styles/navbar.module.css";
 
@@ -24,18 +24,18 @@ const Navbar = () => {
       <div className={styles.title}>{pageTitle}</div>
       <div className={styles.menu}>
         <div className={styles.search}>
-          <MdSearch />
+          <MUISearch />
           <input type="text" placeholder="Search..." className={styles.input} />
         </div>
         <div className={styles.icons}>
-          <MdOutlineChat size={20} />
-          <MdNotifications
-            size={20}
+          <MUIChat fontSize="small" />
+          <MUINotifications
+            fontSize="small"
             onClick={handleNotificationClick}
             className={styles.clickableIcon}
-            style={{ color: isNotificationClicked ? 'blue' : 'black' }} // Change color based on state
+            sx={{ color: isNotificationClicked ? 'blue' : 'black' }} // Change color based on state
           />
-          <MdPublic size={20} />
+          <MUIPublic fontSize="small" />
         </div>
       </div>
     </div>
