@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, Grid, Card, CardContent, IconButton, Divider } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
 import EmailListItem from '@/components/EmailListItem';
 import TabBar from '@/components/AlertSystem/TabBar';
 import styles from '@/styles/AlertPage.module.css';

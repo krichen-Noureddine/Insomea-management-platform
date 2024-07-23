@@ -1,9 +1,11 @@
-// components/Navbar.js
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Notifications as MUINotifications, Chat as MUIChat, Public as MUIPublic, Search as MUISearch } from "@mui/icons-material";
-import { useNotification } from "./Notification";
-import styles from "../styles/navbar.module.css";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import MUINotifications from '@mui/icons-material/Notifications';
+import MUIChat from '@mui/icons-material/Chat';
+import MUIPublic from '@mui/icons-material/Public';
+import MUISearch from '@mui/icons-material/Search';
+import { useNotification } from './Notification';
+import styles from '../styles/navbar.module.css';
 
 const Navbar = () => {
   const router = useRouter();
@@ -12,7 +14,7 @@ const Navbar = () => {
 
   useEffect(() => {}, [addNotification]);
 
-  const pageTitle = router.pathname.split("/").pop() || "Home";
+  const pageTitle = router.pathname.split('/').pop() || 'Home';
 
   const handleNotificationClick = () => {
     toggleNotificationPane();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Mo365List.module.css';
-import { Info } from '@mui/icons-material';
+import Info from '@mui/icons-material/Info';
 
 const Mo365List = ({ subscriptions }) => {
     const [searchTerm, setSearchTerm] = useState('');

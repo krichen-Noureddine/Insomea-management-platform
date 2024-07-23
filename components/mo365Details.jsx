@@ -3,8 +3,11 @@ import {
   Typography, Grid, List, ListItem, ListItemText,
   Box, Chip, Accordion, AccordionSummary, AccordionDetails, Avatar, Divider, Paper
 } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
-import { CheckCircle, Cancel, Info, CalendarToday } from '@mui/icons-material';
+import ExpandMore from '@mui/icons-material/ExpandMore'; // Importing ExpandMore with default syntax
+import Info from '@mui/icons-material/Info'; // Importing Info with default syntax
+import CalendarToday from '@mui/icons-material/CalendarToday'; // Importing CalendarToday with default syntax
+import CheckCircle from '@mui/icons-material/CheckCircle'; // Importing CheckCircle with default syntax
+import Cancel from '@mui/icons-material/Cancel'; // Importing Cancel with default syntax
 
 const Mo365Details = ({ subscription }) => {
   return (

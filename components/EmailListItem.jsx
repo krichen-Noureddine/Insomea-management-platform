@@ -1,7 +1,10 @@
 // components/EmailListItem.js
 
 import React from 'react';
-import { ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const EmailListItem = ({ email, onDelete }) => {
