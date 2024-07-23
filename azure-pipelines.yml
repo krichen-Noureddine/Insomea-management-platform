@@ -7,7 +7,8 @@ pool:
   - agent.name -equals DESKTOP-LV6N60A
 
 variables:
-  MONGODB_URI: $(MONGODB_URI) # Add your environment variable here
+  - name: MONGODB_URI
+    value: $(MONGODB_URI)
 
 steps:
 - task: NodeTool@0
