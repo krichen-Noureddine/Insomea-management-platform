@@ -12,10 +12,6 @@ steps:
     versionSpec: '20.15.0'
   displayName: 'Install Node.js'
 
-# Ensure the node_modules directory exists
-- script: |
-    mkdir -p $(System.DefaultWorkingDirectory)/node_modules
-  displayName: 'Ensure node_modules directory exists'
 
 # Cache node_modules
 - task: Cache@2
@@ -26,10 +22,6 @@ steps:
     restoreKeys: |
       npm | $(Agent.OS)
 
-# Ensure the .next/cache directory exists
-- script: |
-    mkdir -p $(System.DefaultWorkingDirectory)/.next/cache
-  displayName: 'Ensure .next/cache directory exists'
 
 # Cache Next.js build cache
 - task: Cache@2
