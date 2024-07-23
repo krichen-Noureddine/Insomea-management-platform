@@ -6,6 +6,7 @@ import { MsalProvider } from '@azure/msal-react';
 import { msalInstance } from '../utils/msalConfig';
 import { NotificationProvider } from '@/components/Notification';
 import ProtectedRoute from '@/components/needAuth';
+import "../scripts/start-scheduler";
 class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
