@@ -6,21 +6,37 @@ pool:
   demands:
   - agent.name -equals DESKTOP-LV6N60A
 
-
-
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '20.15.0'
   displayName: 'Install Node.js'
 
-- script: |
-    echo "MONGODB_URI is set." # Note: This will not print the actual value due to secret masking
-  displayName: 'Print MongoDB URI'
+- task: Cache@2
+  displayName: 'Cache .next/cache'
+  inputs:
+    key: 'next | $(Agent.OS) | package-lock.json'
+    path: '$(System.DefaultWorkingDirectory)/.next/cache'
+    restoreKeys: |
+      next | $(Agent.OS)
 
 - script: |
     npm install
   displayName: 'Install dependencies'
+
+- task: DownloadSecureFile@1
+  name: DownloadEnvFile
+  inputs:
+    secureFile: '.env.local'
+  displayName: 'Download .env.local'
+
+- script: |
+    cp $(Agent.TempDirectory)/.env.local $(System.DefaultWorkingDirectory)
+  displayName: 'Copy .env.local to working directory'
+
+- script: |
+    echo "MONGODB_URI is set." # Note: This will not print the actual value due to secret masking
+  displayName: 'Print MongoDB URI'
 
 - script: |
     npm run lint
