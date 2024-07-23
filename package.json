@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "start-scheduler": "babel-node scripts/start-scheduler.js"
+    "start-scheduler": "  babel-node scripts/start-scheduler.js",
+  "start-scheduler-dev": "NODE_ENV=development babel-node scripts/start-scheduler.js"
   
   },
   "dependencies": {

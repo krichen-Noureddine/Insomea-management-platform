@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
+console.log('MongoDB URI:', process.env.MONGODB_URI); // Should print your MongoDB URI
 
 
 const uri = process.env.MONGODB_URI;

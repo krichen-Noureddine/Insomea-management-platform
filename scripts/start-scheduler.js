@@ -10,21 +10,47 @@ const updateSubscriptions = async () => {
     const clients = await Credentials.find();
 
     for (const client of clients) {
-      await axios.get(`http://localhost:3000/api/subscriptions?clientId=${client.clientId}`);
+      try {
+        await axios.get(`http://localhost:3000/api/subscriptions?clientId=${client.clientId}`);
+      } catch (error) {
+        console.error(`Error fetching subscriptions for client ${client.clientId}:`, error.response?.data || error.message);
+      }
     }
 
     console.log('Subscriptions updated successfully');
   } catch (error) {
-    console.error('Error updating subscriptions:', error);
+    console.error('Error updating subscriptions:', error.response?.data || error.message);
   }
 };
 
 // Schedule the job to run every day at midnight
-schedule.scheduleJob('0 0 * * *', updateSubscriptions);
+schedule.scheduleJob('0 0 * * *', async () => {
+  console.log('Scheduled job started');
+  await updateSubscriptions();
+  console.log('Scheduled job completed');
+});
 
 // Optionally run the updateSubscriptions immediately for testing
-updateSubscriptions().then(() => {
-  console.log('Immediate updateSubscriptions execution completed');
-}).catch(error => {
-  console.error('Immediate updateSubscriptions execution failed:', error);
-});
+const runImmediately = async () => {
+  try {
+    console.log('Immediate updateSubscriptions execution started');
+    await updateSubscriptions();
+    console.log('Immediate updateSubscriptions execution completed');
+  } catch (error) {
+    console.error('Immediate updateSubscriptions execution failed:', error);
+  } finally {
+    // Properly close the MongoDB connection
+    try {
+      const client = await clientPromise;
+      await client.connection.close(); // No callback needed
+      console.log('MongoDB connection closed');
+    } catch (error) {
+      console.error('Error closing MongoDB connection:', error);
+    } finally {
+      process.exit(0); // Exit successfully
+    }
+  }
+};
+
+// Run immediately for testing
+runImmediately();
