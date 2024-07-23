@@ -12,12 +12,6 @@ steps:
     versionSpec: '20.15.0'
   displayName: 'Install Node.js'
 
-
-
-
-
-
-
 # Cache Next.js build cache
 - task: Cache@2
   displayName: 'Cache .next/cache'
@@ -30,24 +24,21 @@ steps:
 - script: |
     npm install
   displayName: 'Install dependencies'
-# - script: |
-#     npm run build
-#   displayName: 'Build project'
 
 - task: DownloadSecureFile@1
   name: DownloadEnvFile
   inputs:
-    secureFile: '.env.local' 
+    secureFile: '.env.local'
   displayName: 'Download .env.local'
 
 - script: |
-    export $(grep -v '^#' $(DownloadEnvFile.secureFilePath) | xargs)
-  displayName: 'Set environment variables from .env.local'
-  
+    cp $(Agent.TempDirectory)/.env.local $(System.DefaultWorkingDirectory)
+  displayName: 'Copy .env.local to working directory'
+
 - script: |
     npm run start-scheduler
   displayName: 'Run start-scheduler'
-  
+
 - script: |
     npm run lint
   displayName: 'Run lint'
