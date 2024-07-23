@@ -36,6 +36,13 @@ steps:
 - script: |
     npm run start-scheduler
   displayName: 'Run start-scheduler'
+- task: DownloadSecureFile@1
+  name: DownloadEnvFile
+  inputs:
+    secureFile: '.env.local' # Ensure this matches the name of your uploaded secure file
+  displayName: 'Download .env.local'
+
+  
 - script: |
     npm run lint
   displayName: 'Run lint'
