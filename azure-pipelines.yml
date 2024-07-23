@@ -33,7 +33,9 @@ steps:
 - script: |
     npm run build
   displayName: 'Build project'
-
+- script: |
+    npm run start-scheduler
+  displayName: 'Run start-scheduler'
 - script: |
     npm run lint
   displayName: 'Run lint'
