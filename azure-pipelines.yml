@@ -17,7 +17,7 @@ steps:
   displayName: 'Cache node_modules'
   inputs:
     key: 'npm | $(Agent.OS) | package-lock.json'
-    path: '$(Pipeline.Workspace)/node_modules'
+    path: '$(System.DefaultWorkingDirectory)/node_modules'
     restoreKeys: |
       npm | $(Agent.OS)
 
