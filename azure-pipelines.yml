@@ -6,17 +6,12 @@ pool:
   demands:
   - agent.name -equals DESKTOP-LV6N60A
 
-variables:
-  - name: MONGODB_URI
-    value: $(MONGODB_URI)
-
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '20.15.0'
   displayName: 'Install Node.js'
 
-# Cache Next.js build cache
 - task: Cache@2
   displayName: 'Cache .next/cache'
   inputs:
@@ -29,11 +24,25 @@ steps:
     npm install
   displayName: 'Install dependencies'
 
+- task: DownloadSecureFile@1
+  name: DownloadEnvFile
+  inputs:
+    secureFile: '.env.local'
+  displayName: 'Download .env.local'
+
+- script: |
+    copy $(Agent.TempDirectory)\.env.local $(System.DefaultWorkingDirectory)
+  displayName: 'Copy .env.local to working directory'
+  condition: eq(variables['Agent.OS'], 'Windows_NT') # Only run on Windows
+
+- script: |
+    echo "MONGODB_URI is set." # Note: This will not print the actual value due to secret masking
+  displayName: 'Print MongoDB URI'
+
 - script: |
     npm run lint
   displayName: 'Run lint'
 
-# Add the scheduler script step
 - script: |
     npm run start-scheduler
   displayName: 'Run scheduler script'
