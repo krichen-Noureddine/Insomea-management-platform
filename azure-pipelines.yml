@@ -25,24 +25,11 @@ steps:
     npm install
   displayName: 'Install dependencies'
 
-# Add step to handle environment variables
-- task: DownloadSecureFile@1
-  name: envFile
-  inputs:
-    secureFile: '.env.local'
-  displayName: 'Download .env.local file'
-
-- script: |
-    echo "Setting environment variables from .env.local"
-    set -o allexport
-    source $(DownloadSecureFile.envFile)
-    set +o allexport
-    npm run start-scheduler
-  displayName: 'Run start-scheduler'
-
-
-
-
 - script: |
     npm run lint
   displayName: 'Run lint'
+
+# Add the scheduler script step
+- script: |
+    npm run start-scheduler
+  displayName: 'Run scheduler script'
