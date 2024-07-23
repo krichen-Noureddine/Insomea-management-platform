@@ -30,15 +30,20 @@ steps:
 - script: |
     npm install
   displayName: 'Install dependencies'
-- script: |
-    npm run build
-  displayName: 'Build project'
+# - script: |
+#     npm run build
+#   displayName: 'Build project'
 
 - task: DownloadSecureFile@1
   name: DownloadEnvFile
   inputs:
-    secureFile: '.env.local' # Ensure this matches the name of your uploaded secure file
+    secureFile: '.env.local' 
   displayName: 'Download .env.local'
+
+- script: |
+    export $(grep -v '^#' $(DownloadEnvFile.secureFilePath) | xargs)
+  displayName: 'Set environment variables from .env.local'
+  
 - script: |
     npm run start-scheduler
   displayName: 'Run start-scheduler'
