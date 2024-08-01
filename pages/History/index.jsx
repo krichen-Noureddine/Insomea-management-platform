@@ -71,7 +71,7 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
 
   const fetchHistoriqueRecords = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/historique', {
+      const response = await axios.get('/api/historique', {
         params: filters,
       });
       const { historiqueRecords } = response.data;
@@ -208,9 +208,7 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
         <button className={styles.pdfExportButton} onClick={handleExportCSV}>Export CSV</button>
       </div>
 
-      <div className={styles.totalCostContainer}>
-        <span>Total Cost: ${calculateTotalCost()}</span>
-      </div>
+      
 
       <div className={styles.tableContainer}>
         <table className={styles.table}>

@@ -1,11 +1,10 @@
-//pages/clients/[id].jsx
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ClientDetails from '@/components/ClientDetails';
 import AdditionalDetails from '@/components/AdditionalClientDetails';
 import { Box, Tabs, Tab, CircularProgress, Typography } from '@mui/material';
-
 import History from '@/components/History';
+
 const ClientDetail = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -34,6 +33,29 @@ const ClientDetail = () => {
     fetchClient();
   }, [id]);
 
+  useEffect(() => {
+    if (tabIndex === 0) {
+      const fetchClientDetails = async () => {
+        if (!id) return;
+        setLoading(true);
+        try {
+          const res = await fetch(`/api/clients/${id}`);
+          if (!res.ok) {
+            throw new Error('Failed to fetch client details');
+          }
+          const data = await res.json();
+          setClient(data);
+        } catch (error) {
+          console.error('Fetch error:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchClientDetails();
+    }
+  }, [tabIndex, id]);
+
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
@@ -46,12 +68,12 @@ const ClientDetail = () => {
       <Tabs value={tabIndex} onChange={handleTabChange} centered>
         <Tab label="Client Details" sx={{ color: 'white' }} />
         <Tab label="Additional Details" sx={{ color: 'white' }} />
+        <Tab label="History" sx={{ color: 'white' }} />
       </Tabs>
       <Box sx={{ p: 3 }}>
         {tabIndex === 0 && <ClientDetails client={client} />}
         {tabIndex === 1 && <AdditionalDetails client={client.organizationDetails} />}
         {tabIndex === 2 && <History clientId={id} />}
-
       </Box>
     </Box>
   );

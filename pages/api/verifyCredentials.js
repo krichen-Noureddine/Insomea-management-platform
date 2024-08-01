@@ -3,7 +3,6 @@ export async function verifyCredentials(azureClientId, tenantId, clientSecret) {
     const resource = 'https://graph.microsoft.com';
 
     try {
-        console.log('Requesting access token...');
         
         const tokenResponse = await fetch(tokenEndpoint, {
             method: 'POST',
@@ -28,7 +27,6 @@ export async function verifyCredentials(azureClientId, tenantId, clientSecret) {
         const tokenData = await tokenResponse.json();
         const accessToken = tokenData.access_token;
 
-        console.log('Access token obtained:', accessToken);
 
         const detailsResponse = await fetch(`${resource}/v1.0/servicePrincipals?$filter=appId eq '${azureClientId}'`, {
             headers: {

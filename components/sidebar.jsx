@@ -54,6 +54,7 @@ const menuItems = [
         path: "/calendar",
         icon: <MdWork />,
       },
+   
       {
         title: "Reports",
         path: "/dashboard/reports",
@@ -63,6 +64,11 @@ const menuItems = [
         title: "Reminder",
         path: "/reminder",
         icon: <HiBellAlert />,
+      },
+      {
+        title: "History",
+        path: "/History",
+        icon: <MdWork />,
       },
     ],
   },
