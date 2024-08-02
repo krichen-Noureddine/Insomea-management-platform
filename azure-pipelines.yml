@@ -51,9 +51,4 @@ steps:
     npm run start-scheduler
   displayName: 'Run scheduler script'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifacts'
-  inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/out'
-    ArtifactName: 'next-app'
-    publishLocation: 'Container'
+
