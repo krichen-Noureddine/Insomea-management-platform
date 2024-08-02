@@ -23,14 +23,14 @@ const updateSubscriptions = async () => {
   }
 };
 
-// Schedule the job to run every day at midnight
-schedule.scheduleJob('0 0 * * *', async () => {
+schedule.scheduleJob('*/1 * * * *', async () => {
   console.log('Scheduled job started');
   await updateSubscriptions();
   console.log('Scheduled job completed');
 });
 
-// Optionally run the updateSubscriptions immediately for testing
+// Remove or comment out the immediate execution for testing
+/*
 const runImmediately = async () => {
   try {
     console.log('Immediate updateSubscriptions execution started');
@@ -54,3 +54,5 @@ const runImmediately = async () => {
 
 // Run immediately for testing
 runImmediately();
+*/
+
