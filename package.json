@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "jest",
     "start-scheduler": "  babel-node scripts/start-scheduler.js",
-    "start-scheduler-dev": "NODE_ENV=development babel-node scripts/start-scheduler.js"
+    "start-scheduler-dev": "NODE_ENV=development babel-node scripts/start-scheduler.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run start-scheduler\""
   },
   "dependencies": {
     "@azure/arm-costmanagement": "^1.0.0-beta.1",
@@ -38,6 +39,7 @@
     "@mui/x-data-grid": "^7.3.0",
     "@mui/x-date-pickers": "^7.10.0",
     "@mui/x-date-pickers-pro": "^7.10.0",
+    "@next/env": "^15.0.3",
     "@next/eslint-plugin-next": "14.0.1",
     "@nivo/bar": "^0.85.1",
     "@nivo/core": "^0.85.1",
@@ -54,6 +56,8 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
     "docker": "^1.0.0",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "fullcalendar": "^6.1.11",
     "jwt-decode": "^4.0.0",
     "libphonenumber-js": "^1.10.60",
@@ -78,7 +82,8 @@
     "rsuite": "^5.66.0",
     "rsuite-datepicker": "^3.0.7",
     "swr": "^2.2.5",
-    "use-debounce": "^10.0.0"
+    "use-debounce": "^10.0.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",
@@ -91,6 +96,7 @@
     "@testing-library/react": "^16.0.0",
     "autoprefixer": "^10.4.19",
     "babel-jest": "^29.7.0",
+    "concurrently": "^9.1.0",
     "eslint": "8",
     "eslint-config-next": "14.0.1",
     "identity-obj-proxy": "^3.0.0",

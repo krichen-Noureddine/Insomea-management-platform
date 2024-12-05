@@ -32,30 +32,77 @@
   }
   
   .searchAndFilterBar {
-    display: flex;
-    /* Space out search, filter, and PDF export button */
-    padding: 10px;
-    margin-bottom: 20px;
-    
+    display: flex; /* To align icon and text horizontally */
+
+    padding: 12px;
+    gap: 15px; /* Adds consistent spacing between each element */
+    border-radius: 15px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
 }
 
 .searchInput, .filterSelect {
-    padding: 8px;
-    margin-right: 10px; /* Space between search/filter and the button */
-    border: 3px solid #128C8B;
-    border-radius: 20px;
-    background-color: var(--bg);
-   
+  padding: 10px 15px;
+  border: 2px solid #128C8B;
+  border-radius: 20px;
+  background-color: var(--bg, #812d2d); /* Fall back color if --bg is unset */
+  color: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none; /* Removes default styling on some browsers */
+}
+
+/* Styling for the dropdown options */
+.filterSelect option {
+  background-color: #17223f; /* Background color of the dropdown options */
+  color: #ffffff; /* Text color for readability */
+  padding: 8px; /* Padding inside each option */
+}
+
+/* Hover effect for dropdown options */
+.filterSelect option:hover {
+  background-color: #128C8B; /* Change background color on hover */
+  color: #ffffff; /* Keep text color white for contrast */
+}
+
+
+.searchInput:hover, .filterSelect:hover {
+    border-color: #0a6c6b; /* Darker border on hover */
+    box-shadow: 0px 0px 6px rgba(18, 140, 139, 0.3); /* Subtle glow effect */
+}
+
+.searchInput:focus, .filterSelect:focus {
+    outline: none; /* Removes default outline */
+    border-color: #0a6c6b;
+    box-shadow: 0px 0px 6px rgba(10, 108, 107, 0.5); /* Stronger shadow on focus */
 }
 
 .pdfExportButton {
-    padding: 8px 20px;
-    background-color: #128C8B; /* Example color, choose what fits your design */
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
+  display: flex; /* To align icon and text horizontally */
+  align-items: center; /* Center icon and text vertically */
+  gap: 8px; /* Space between icon and text */
+  padding: 10px 24px; /* Slightly larger padding for better click area */
+  background-color: #128C8B; /* Main button color */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px; /* Adjust font size for readability */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin : 5px
 }
+
+.pdfExportButton:hover {
+  background-color: #0a6c6b; /* Darker shade on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+.pdfExportButton:active {
+  transform: scale(0.95); /* Pressed-down effect */
+}
+
+.pdfExportButton svg {
+  font-size: 18px; /* Adjust icon size */
+}
+
 .searchInput::placeholder {
     color: white; /* Change #888 to whatever color you prefer */
     opacity: 1; /* Ensures the color is not transparent; adjust as needed */

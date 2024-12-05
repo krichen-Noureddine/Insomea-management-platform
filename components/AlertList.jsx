@@ -1,7 +1,7 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, CircularProgress } from '@mui/material';
 
-const AlertList = ({ alerts }) => {
+const AlertList = ({ alerts, onResend, loading }) => {
   return (
     <Paper sx={{ backgroundColor: '#182237', color: 'white' }}>
       <Table>
@@ -22,7 +22,14 @@ const AlertList = ({ alerts }) => {
               <TableCell style={{ color: 'white' }}>{alert.description}</TableCell>
               <TableCell style={{ color: 'white' }}>{new Date(alert.date).toLocaleDateString()}</TableCell>
               <TableCell style={{ color: 'white' }}>
-                {/* Add actions for edit and delete */}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => onResend(alert)}
+                  disabled={loading}  // Disable button if loading
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : 'Resend'}
+                </Button>
               </TableCell>
             </TableRow>
           ))}

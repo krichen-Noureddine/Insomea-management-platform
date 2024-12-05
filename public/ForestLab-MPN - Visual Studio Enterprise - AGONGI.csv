@@ -1,0 +1,5 @@
+Service,Cost,Usage,Date,Resource Location,Category,Currency
+Azure Cosmos DB,0.000030052962795,0.000120211500352,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East 2,Azure Cosmos DB,USD
+Azure DNS,0.01628908,0.032658064516129,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Azure Database for MySQL,0.8459005472,26.4636962903226,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Azure Database for MySQL,USD
+Container Instances,2.26443613519941,120.001914944167,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Container Instances,USD

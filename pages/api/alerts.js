@@ -8,8 +8,7 @@ export default async function handler(req, res) {
     const db = client.connection.db;
 
     if (req.method === 'GET') {
-      const alerts = await db.collection('AlertHistory').find({}).toArray();
-      console.log("ahiyaaaaaa",alerts);
+      const alerts = await db.collection('alerthistories').find({}).toArray();
       res.status(200).json(alerts);
     } else {
       res.status(405).json({ message: 'Method not allowed' });

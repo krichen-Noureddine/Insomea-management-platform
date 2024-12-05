@@ -9,23 +9,49 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
-  const [filterOption, setFilterOption] = useState('');
+  const [groupByOption, setGroupByOption] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc'); // Default sort order: ascending
+
+  // Function to sort clients based on the selected field and order
+  const sortClients = (clients, field, order) => {
+    return clients.sort((a, b) => {
+      const valueA = a[field]?.toLowerCase() || '';
+      const valueB = b[field]?.toLowerCase() || '';
+      if (order === 'asc') {
+        return valueA.localeCompare(valueB);
+      } else {
+        return valueB.localeCompare(valueA);
+      }
+    });
+  };
+
+  // Function to group clients by address or alphabetically
+  const groupClients = (clients, option) => {
+    switch (option) {
+      case 'address':
+        return clients.sort((a, b) => (a.clientLocation || '').localeCompare(b.clientLocation || ''));
+      case 'alphabetical':
+        return sortClients(clients, 'companyName', sortOrder);
+      default:
+        return clients;
+    }
+  };
 
   const filteredClients = clients.filter(client =>
     (client.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       client.contactName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       client.contactEmail?.toLowerCase().includes(searchTerm.toLowerCase()))
-    && (filterOption === '' || client.someProperty === filterOption) // Adjust as per your data structure
   );
 
   useEffect(() => {
-    console.log("ClientsTable clients prop:", clients);
     setIsLoading(false); // No need to fetch data here since it's passed as a prop
   }, [clients]);
 
-  const handleFilterChange = (e) => {
-    setFilterOption(e.target.value);
+  const handleGroupByChange = (e) => {
+    setGroupByOption(e.target.value);
   };
+
+
 
   const promptDelete = (clientId) => {
     setShowDeletePopup(true);
@@ -52,14 +78,11 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
           return updatedClients;
         });
       } else {
-        // Server responded with an error status
         console.error(`Failed to delete client with ID: ${clientIdToDelete}. Status: ${response.statusText}`);
       }
     } catch (error) {
-      // An error occurred during fetch
       console.error(`Error occurred while deleting client with ID: ${clientIdToDelete}.`, error);
     } finally {
-      // This block will run regardless of the try/catch outcome
       console.log(`Deletion process completed for client with ID: ${clientIdToDelete}.`);
       setShowDeletePopup(false);
       setClientIdToDelete(null); // Reset for future deletions
@@ -69,9 +92,10 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
   if (isLoading) return <p>Loading clients...</p>;
   if (!clients.length) return <p>No clients found.</p>;
 
+  const groupedAndSortedClients = groupClients(filteredClients, groupByOption);
+
   return (
     <div className={styles.container}>
-      {/* Step 2: Search input and Filter dropdown */}
       <div className={styles.searchAndFilterBar}>
         <input
           type="text"
@@ -80,16 +104,13 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <select className={styles.filterSelect} value={filterOption} onChange={handleFilterChange}>
-          <option value="">Filter by...</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          {/* More options as per your data */}
+        <select className={styles.filterSelect} value={groupByOption} onChange={handleGroupByChange}>
+          <option value="">Group By...</option>
+          <option value="address">Address</option>
+          <option value="alphabetical">Alphabetical</option>
         </select>
-        {/* PDF Export Button */}
-        <button className={styles.pdfExportButton}>
-          Export
-        </button>
+        {/* Sort Button */}
+        
       </div>
 
       <div className={styles.tableWrapper}>
@@ -110,12 +131,11 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
             </tr>
           </thead>
           <tbody>
-            {/* Step 3: Mapping filtered clients */}
-            {filteredClients.map((client) => (
+            {groupedAndSortedClients.map((client) => (
               <tr
                 key={client._id}
                 onClick={() => router.push(`/clients/${client._id}`)}
-                style={{ cursor: 'pointer' }} // Optional: Changes the cursor to indicate clickable
+                style={{ cursor: 'pointer' }}
               >
                 <td>{client.companyName}</td>
                 <td>{client.contactName}</td>
@@ -126,7 +146,7 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
                   <button
                     className={styles.button}
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevents row click event
+                      e.stopPropagation();
                       onEdit(client);
                     }}
                     style={{ marginRight: '10px' }}
@@ -136,7 +156,7 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
                   <button
                     className={styles.button}
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevents row click event
+                      e.stopPropagation();
                       promptDelete(client._id);
                     }}
                   >

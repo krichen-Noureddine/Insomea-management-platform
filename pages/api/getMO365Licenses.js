@@ -3,7 +3,6 @@ import { getAccessToken, getMO365Licenses, getSubscriptionDetails, getUserLicens
 import clientPromise from "@/database/mongodb";
 import { Credentials } from "@/model/Credentials";
 import License from '@/model/liscence';
-import Client from '@/model/client'; // Import Client model
 const GRAPH_SCOPE = 'https://graph.microsoft.com/.default';
 const MANAGEMENT_SCOPE = 'https://management.azure.com/.default';
 const BC_SCOPE = 'https://api.businesscentral.dynamics.com/.default';

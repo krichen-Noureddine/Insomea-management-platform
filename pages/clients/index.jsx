@@ -87,10 +87,7 @@ const ClientsPage = () => {
                     client._id === editingClient._id ? { ...client, ...formData, ...updatedClient } : client
                 )
             );
-
-            setShowForm(false);
-            setEditingClient(null);
-            setActiveComponent('combinedView'); // Switch back to combined view after update
+                  resetFormMode();
             addNotification('Client updated successfully', 'success');
         } catch (error) {
             console.error('Error updating client:', error);

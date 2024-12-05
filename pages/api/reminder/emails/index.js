@@ -25,7 +25,11 @@ export default async function handler(req, res) {
         // Insert the email address into the 'Email' collection
         const result = await db.collection('Email').insertOne({ address });
 
-        res.status(200).json({ message: 'Email saved successfully', data: result.ops });
+        // Return the inserted document along with its _id
+        res.status(200).json({ 
+          message: 'Email saved successfully', 
+          data: { _id: result.insertedId, address }
+        });
       } catch (error) {
         console.error('Error saving email:', error);
         res.status(500).json({ error: 'Failed to save email' });

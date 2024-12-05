@@ -63,7 +63,7 @@ const PowerBIEmbed = ({ reportId, embedUrl, accessToken }) => {
     loadPowerBI();
   }, [reportId, embedUrl, accessToken]);
 
-  return <div ref={embedContainer} style={{ height: '541.25px', width: '1140px' }}></div>;
+  return <div ref={embedContainer} style={{ height: '541.25px', width: '140px' }}></div>;
 };
 
 export default PowerBIEmbed;

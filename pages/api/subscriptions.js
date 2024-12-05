@@ -34,8 +34,6 @@ export default async function handler(req, res) {
     const subscriptionClient = new SubscriptionClient(credential);
     const subscriptionDetails = [];
 
-  
-
     for await (const item of subscriptionClient.subscriptions.list()) {
 
       const subscription = await subscriptionClient.subscriptions.get(item.subscriptionId);
@@ -51,7 +49,8 @@ export default async function handler(req, res) {
         azureProvider: item.authorizationSource,
         authorizationSource: item.authorizationSource,
         subscriptionPolicies: item.subscriptionPolicies,
-        provisioningState: subscription.provisioningState // Adding provisioning state
+        provisioningState: subscription.provisioningState, // Adding provisioning state
+        updatedAt: new Date().toISOString() // Adding the updatedAt field
       };
 
       subscriptionDetails.push(azureSubscription);

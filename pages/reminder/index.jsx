@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, TextField, Button } from '@mui/material';
+import { Container, Typography, Box, TextField, Button, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AlertList from '@/components/AlertList';
 import AlertModal from '@/components/AlertModal';
@@ -9,11 +9,13 @@ import styles from '@/styles/AlertPage.module.css';
 const AlertsPage = () => {
   const [clients, setClients] = useState([]);
   const [licenses, setLicenses] = useState([]);
+  const [managerEmails, setManagerEmails] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [open, setOpen] = useState(false);
   const [newAlert, setNewAlert] = useState({ type: '', description: '', date: '', client: '', category: 'MO365' });
+  const [loading, setLoading] = useState(false);
 
-  // Fetch clients data
+  // Fetch clients, licenses, and manager emails
   const fetchClients = async () => {
     try {
       const response = await fetch('/api/clients');
@@ -24,7 +26,6 @@ const AlertsPage = () => {
     }
   };
 
-  // Fetch licenses data
   const fetchLicenses = async () => {
     try {
       const response = await fetch('/api/mo365');
@@ -35,85 +36,112 @@ const AlertsPage = () => {
     }
   };
 
+  const fetchManagerEmails = async () => {
+    try {
+      const response = await fetch('/api/reminder/emails');
+      const data = await response.json();
+      setManagerEmails(data.map((item) => item.address));
+    } catch (error) {
+      console.error('Failed to fetch manager emails', error);
+    }
+  };
+
   useEffect(() => {
     fetchClients();
     fetchLicenses();
+    fetchManagerEmails();
   }, []);
 
-  // Generate alerts based on specific conditions
   useEffect(() => {
-    const generatedAlerts = [];
+    const generateAlerts = () => {
+      const generatedAlerts = licenses
+        .map((license) => {
+          const client = clients.find((client) => client._id === license.clientId);
+          if (license.nextLifecycleDateTime) {
+            const expirationDate = new Date(license.nextLifecycleDateTime);
+            if (expirationDate < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)) {
+              return {
+                id: license._id,
+                client: client ? client.companyName : license.clientName,
+                type: 'License Expiration',
+                description: `The license ${license.skuPartNumber} for client ${client ? client.companyName : license.clientName} will expire on ${expirationDate.toLocaleDateString()}.`,
+                date: new Date().toISOString(),
+                category: 'MO365',
+              };
+            }
+          }
+          return null;
+        })
+        .filter(Boolean); // Removes null values
+      setAlerts(generatedAlerts);
+    };
 
-    licenses.forEach((license) => {
-      const client = clients.find((client) => client._id === license.clientId);
-
-      // Check for suspended licenses
-      // if (license.status === 'Suspended') {
-      //   generatedAlerts.push({
-      //     id: license.id,
-      //     client: client ? client.companyName : 'Unknown Client',
-      //     type: 'License Suspended',
-      //     description: `The license ${license.skuPartNumber} for client ${client ? client.companyName : 'Unknown'} is suspended.`,
-      //     date: new Date().toISOString(),
-      //     category: 'MO365',
-      //   });
-      // }
-
-      // Check for upcoming expiration dates
-      if (license.nextLifecycleDateTime && new Date(license.nextLifecycleDateTime) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)) {
-        generatedAlerts.push({
-          id: license.id,
-          client: client ? client.companyName : 'Unknown Client',
-          type: 'License Expiration',
-          description: `The license ${license.skuPartNumber} for client ${client ? client.companyName : 'Unknown'} will expire on ${new Date(license.nextLifecycleDateTime).toLocaleDateString()}.`,
-          date: new Date().toISOString(),
-          category: 'MO365',
-        });
-      }
-    });
-
-    setAlerts(generatedAlerts);
+    generateAlerts();
   }, [clients, licenses]);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleResend = async (alertData) => {
+    setLoading(true);
+    try {
+      if (!managerEmails.length) throw new Error('No manager emails available.');
+      
+      for (const email of managerEmails) {
+        const response = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: email,
+            subject: `License Expiration Reminder: ${alertData.type}`,
+            text: alertData.description,
+          }),
+        });
 
-  const handleSave = () => {
+        const result = await response.json();
+        if (response.ok) {
+          window.alert(`Email sent successfully to: ${email} with ID: ${result.messageId}`);
+        } else {
+          window.alert(`Failed to send email to ${email}: ${result.error}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      window.alert('Error sending email');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
     const updatedAlerts = [...alerts, newAlert];
     setAlerts(updatedAlerts);
     setNewAlert({ type: '', description: '', date: '', client: '', category: 'MO365' });
     handleClose();
+    
+    if (managerEmails.length) {
+      await handleResend(updatedAlerts[updatedAlerts.length - 1]);
+    }
   };
 
   return (
     <div>
-      <TabBar /> {/* Include the TabBar component */}
-      <div className={styles.container}>     
+      <TabBar />
+      <div className={styles.container}>
+        
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <TextField
-            label="Search Alerts"
-            variant="outlined"
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: 'white' },
-                '&:hover fieldset': { borderColor: 'white' },
-                '&.Mui-focused fieldset': { borderColor: 'white' },
-              },
-            }}
+
+          <input
+            type="text"
+            className={`${styles.searchInput} ${styles.formControl}`}
+            placeholder="Search by Client"
           />
-          <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpen}>
-            Add Alert
-          </Button>
+         
+          
         </Box>
         <Box>
-          <Typography variant="h6">MO365 Alerts</Typography>
-          <AlertList alerts={alerts} />
+          <AlertList alerts={alerts} onResend={handleResend} loading={loading} />
         </Box>
         <AlertModal
           open={open}
-          handleClose={handleClose}
+          handleClose={() => setOpen(false)}
           clients={clients}
           newAlert={newAlert}
           setNewAlert={setNewAlert}

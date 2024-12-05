@@ -1,0 +1,40 @@
+Service,Cost,Usage,Date,Resource Location,Category,Currency
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure Cosmos DB,0.000030052962795,0.000120211500352,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East 2,Azure Cosmos DB,USD
+Azure DNS,0.01628908,0.032658064516129,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Azure Database for MySQL,0.8459005472,26.4636962903226,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Azure Database for MySQL,USD
+Container Instances,2.26443613519941,120.001914944167,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Container Instances,USD
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 11:00:31 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Wed Jul 17 2024 13:28:14 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258064,0.032412064516129,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Azure DNS,0.016190632258065,0.032412064516129,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Storage,0.70189056,0.032256,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Virtual Network,0.2064,48,Sun Jul 07 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Automation,0.000866666666667,0.433333333333333,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Automation,USD
+Azure Cosmos DB,0.000285094310487,0.001011353241952,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),US Central,Azure Cosmos DB,USD
+Azure DNS,0.016195032258065,0.032423064516129,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),Unknown,Azure DNS,USD
+Bandwidth,0.000624599926173,0.007180722430348,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Bandwidth,USD
+Storage,0.387084015,0.079659,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Storage,USD
+Storage,0.309669759,0.047803,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU West,Storage,USD
+Storage,0.1654462,5.340956,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Storage,USD
+Virtual Machines,0.766401888,7.983353,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Virtual Machines,USD
+Virtual Network,0.24,48,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU North,Virtual Network,USD
+Virtual Network,0.12,24,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),EU West,Virtual Network,USD
+Virtual Network,0.12,24,Tue Jul 30 2024 01:00:00 GMT+0100 (West Africa Standard Time),US East,Virtual Network,USD

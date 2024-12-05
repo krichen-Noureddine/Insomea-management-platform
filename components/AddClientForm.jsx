@@ -1,179 +1,142 @@
-import React, { useState, useEffect } from 'react';
-import styles from '../styles/form.module.css'; // Import CSS module file for styling
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import styles from '../styles/form.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-const ClientForm = ({ initialData, handleSubmit,showForm, setShowForm ,resetFormMode }) => {
-    const [formData, setFormData] = useState({
-        companyName: '',
-        contactName: '',
-        contactEmail: '',
-        contactPhone: '',
-        azureTenantId: '',
-        organizationType: '', // Nouveau champ ajouté
-        
-        domains: ''
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    // const [showForm, setShowForm] = useState(false); // State to control form visibility
 
+const ClientForm = ({ initialData, handleSubmit, showForm, setShowForm, resetFormMode }) => {
+    const { register, handleSubmit: handleFormSubmit, formState: { errors }, reset } = useForm();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Populate form fields with initial data if provided
     useEffect(() => {
         if (initialData) {
-            setFormData(initialData); // If there's initial data, populate the form with it
-        }
-    }, [initialData]); // Re-run this effect if initialData changes
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleFormSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        try {
-            await handleSubmit(formData); // Attempt to submit form data
-            setFormData({ // Reset form data upon successful submission
+            reset(initialData); // Use reset from react-hook-form to set initial data
+        } else {
+            reset({ // Reset to default values if no initial data
                 companyName: '',
                 contactName: '',
                 contactEmail: '',
                 contactPhone: '',
-                clientLocation:'',
-                clientAdresse:'',
-              
-                organizationType: '', // Nouveau champ ajouté
-           
+                clientLocation: '',
+                clientAddress: '',
+                organizationType: '',
                 domains: ''
             });
+        }
+    }, [initialData, reset]);
 
-            setShowForm(false); 
+    const onSubmit = async (data) => {
+        setIsSubmitting(true);
+        try {
+            await handleSubmit(data);
+            reset(); // Reset form on successful submission
+            setShowForm(false);
         } catch (error) {
-            console.error('Error submitting form:', error); // Log any errors
+            console.error('Error submitting form:', error);
         } finally {
-            setIsSubmitting(false); // Reset submission status
+            setIsSubmitting(false);
         }
     };
 
     return (
         <div className={styles.container}>
-        {/* Button to toggle form display */}
-        {!showForm && (
-            <button onClick={() => setShowForm(true)} className={styles.submitButton}>
-                {initialData ? 'Edit Client' : 'Create Client'}
-            </button>
-        )}
+            {!showForm && (
+                <button onClick={() => setShowForm(true)} className={styles.submitButton}>
+                    {initialData ? 'Edit Client' : 'Create Client'}
+                </button>
+            )}
 
-        {/* Conditionally render the form based on showForm state */}
-        {showForm && (
+            {showForm && (
                 <div className={styles.formContainer}>
-                    <form className={styles.form} onSubmit={handleFormSubmit}>
-                <div className={styles.formGroup}>
-                  
-                    <input
-                        type="text"
-                        id="companyName"
-                        placeholder="Client Name"
-                        name="companyName"
-                        value={formData.companyName}
-                        onChange={handleChange}
-                        className={styles.input}
-                    />
+                    <form className={styles.form} onSubmit={handleFormSubmit(onSubmit)}>
+                        <div className={styles.formGroup}>
+                            <input
+                                type="text"
+                                id="companyName"
+                                placeholder="Client Name"
+                                {...register('companyName', { required: 'Company name is required' })}
+                                className={styles.input}
+                            />
+                            {errors.companyName && <p className={styles.error}>{errors.companyName.message}</p>}
+                        </div>
+                        <div className={styles.formGroup}>
+                            <input
+                                type="text"
+                                id="contactName"
+                                placeholder='Client Contact Name'
+                                {...register('contactName', { required: 'Contact name is required' })}
+                                className={styles.input}
+                            />
+                            {errors.contactName && <p className={styles.error}>{errors.contactName.message}</p>}
+                        </div>
+                        <div className={styles.formGroup}>
+                            <input
+                                type="email"
+                                id="contactEmail"
+                                placeholder="Email"
+                                {...register('contactEmail', { required: 'Email is required' })}
+                                className={styles.input}
+                            />
+                            {errors.contactEmail && <p className={styles.error}>{errors.contactEmail.message}</p>}
+                        </div>
+                        <div className={styles.formGroup}>
+                            <input
+                                type="tel"
+                                id="contactPhone"
+                                placeholder="Phone"
+                                {...register('contactPhone', { required: 'Phone number is required' })}
+                                className={styles.input}
+                            />
+                            {errors.contactPhone && <p className={styles.error}>{errors.contactPhone.message}</p>}
+                        </div>
+                        <div className={styles.formGroup}>
+                            <input
+                                type="text"
+                                id="clientLocation"
+                                placeholder='Location'
+                                {...register('clientLocation')}
+                                className={styles.input}
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <select
+                                id="organizationType"
+                                {...register('organizationType', { required: 'Organization type is required' })}
+                                className={styles.input}
+                            >
+                                <option value="">Select Type</option>
+                                <option value="SMB">SMB</option>
+                                <option value="Enterprise">Corporate</option>
+                                <option value="NGO">NGO</option>
+                                <option value="Government">Government</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            {errors.organizationType && <p className={styles.error}>{errors.organizationType.message}</p>}
+                        </div>
+                        <div className={styles.formGroup}>
+                            <input
+                                type="text"
+                                id="clientAddress"
+                                placeholder='Address'
+                                {...register('clientAddress')}
+                                className={styles.input}
+                            />
+                        </div>
+
+                        <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : (initialData ? 'Update' : 'Create')}
+                        </button>
+                        <button type="button" className={styles.closeButton} onClick={() => { 
+                            setShowForm(false);
+                            resetFormMode();
+                        }}>
+                            <CloseIcon />
+                        </button>
+                    </form>
                 </div>
-                <div className={styles.formGroup}>
-                 
-                    <input
-                        type="text"
-                        id="contactName"
-                        placeholder='Client Contact Name'
-                        name="contactName"
-                        value={formData.contactName}
-                        onChange={handleChange}
-                        className={styles.input}
-                    />
-                </div>
-                <div className={styles.formGroup}>
-              
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        
-                        id="contactEmail"
-                        name="contactEmail"
-                        value={formData.contactEmail}
-                        onChange={handleChange}
-                        className={styles.input}
-                    />
-                </div>
-                <div className={styles.formGroup}>
-               
-                    <input
-                        type="tel"
-                        id="contactPhone"
-                        placeholder="Phone"
-                        name="contactPhone"
-                        value={formData.contactPhone}
-                        onChange={handleChange}
-                        className={styles.input}
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                
-                    <input
-                        type="text"
-                        id="clientLocation"
-                        placeholder='Location'
-                        name="clientLocation"
-                        value={formData.clientLocation}
-                        onChange={handleChange}
-                        className={styles.input}
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                
-                    <select
-                        id="organizationType"
-                        name="organizationType"
-                        placeholder="Organization Type"
-                        value={formData.organizationType}
-                        onChange={handleChange}
-                        className={styles.input}
-                    >
-                        <option value="">Select Type</option>
-                        <option value="SMB">SMB</option>
-                        <option value="Enterprise">Corporate</option>
-                        <option value="NGO">NGO</option>
-                        <option value="Government">Government</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div className={styles.formGroup}>
-                    
-                    <input
-                        type="text"
-                        id="clientAddress"
-                        placeholder='Address'
-                        name="clientAddress"
-                        value={formData.clientAddress}
-                        onChange={handleChange}
-                        className={styles.input}
-                    />
-                </div>
-             
-                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                    {isSubmitting ? 'Submitting...' : (initialData ? 'Update' : 'Create')}
-                </button>
-                <button type="button" className={styles.closeButton} onClick={() => { 
-                    setShowForm(false);
-                    resetFormMode(); // This will reset the form to "create new" mode
-                }}>
-                    <CloseIcon />
-                </button>
-            </form>
-            </div>
-        )}
-    </div>
-);
+            )}
+        </div>
+    );
 }
 
 export default ClientForm;

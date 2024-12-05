@@ -2,14 +2,13 @@ import mongoose from 'mongoose';
 
 const clientSchema = new mongoose.Schema({
   _id: { type: String, default: () => new mongoose.Types.ObjectId().toString() },
-  
   clientId: String,
-  companyName: String,
+  companyName: { type: String, required: true, minlength: 3 },
   industry: String,
-  contactName: String,
-  contactEmail: String,
-  contactPhone: String,
-  clientLocation: String,
+  contactName: { type: String, required: true },
+  contactEmail: { type: String, required: true, match: /\S+@\S+\.\S+/ }, // Validation d'email
+  contactPhone: { type: String, required: true, match: /^[0-9]{8,15}$/ }, // Exemple de validation pour numéro de téléphone
+  clientLocation: { type: String, required: true },
   clientAddress: String,
   azureSubscriptionIds: [String],
   subscriptionStartDate: Date,
@@ -19,15 +18,15 @@ const clientSchema = new mongoose.Schema({
   paymentTerms: String,
   billingContact: String,
   currentBalance: Number,
-  invoiceHistory: [String], // Assuming invoiceHistory is an array of strings
-  usageMetrics: mongoose.Mixed, // Use mongoose.Schema.Types.Mixed if the structure is not fixed
-  consumptionAlerts: [mongoose.Mixed], // Mixed type for flexibility
+  invoiceHistory: [String],
+  usageMetrics: mongoose.Mixed,
+  consumptionAlerts: [mongoose.Mixed],
   supportTicketHistory: [String],
   communicationPreferences: mongoose.Mixed,
   azureTenantId: String,
   organizationType: {
     type: String,
-    enum: ['SMB', 'CORPORATE', 'NGO', 'Government', 'Other'], // Built-in enum validation
+    enum: ['SMB', 'CORPORATE', 'Government', 'Government', 'Other'],
   },
   status: {
     type: String,
@@ -37,9 +36,8 @@ const clientSchema = new mongoose.Schema({
   domains: [String],
   createdClientDateTime: {
     type: Date,
-    required: true // Ensuring the field is required
-},
-  // Adding new fields
+    required: true
+  },
   businessPhones: [String],
   city: String,
   country: String,
@@ -63,9 +61,9 @@ const clientSchema = new mongoose.Schema({
   updatedTimestamp: {
     type: Date,
     default: Date.now,
-},
-
+  },
 });
+
 
 // Adding a method to the schema
 clientSchema.methods.addMo365License = function (license) {

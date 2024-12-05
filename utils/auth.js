@@ -8,11 +8,16 @@ const useAuthentication = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [account, setAccount] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
+  const [userRoles, setUserRoles] = useState([]);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [userProfiles, setUserProfiles] = useState(null); // State to hold user profiles
-  const [appRoles, setAppRoles] = useState(null); // State to hold application roles
+  const [appRoles, setAppRoles] = useState(null);
   const [servicePrincipalRoles, setServicePrincipalRoles] = useState(null);
-const [enrichedAssignments, setEnrichedAssignments] = useState(null);
-
+  const [enrichedAssignments, setEnrichedAssignments] = useState(null);
+  const allowedRoles = [
+    "37989c24-be1d-4573-aa51-d59094cdfb62", // Replace with your allowed appRoleId(s)
+    "6c800343-9efa-4e21-bdce-91789e4533d8",
+  ];
 
   useEffect(() => {
     if (accounts.length > 0) {
@@ -39,23 +44,23 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
   const handleLogout = () => {
     instance.logout();
   };
+
   const getAccessToken = async () => {
-    // Define the accessTokenRequest object outside the try block but inside the function
-    // so it's accessible throughout the function scope
     const accessTokenRequest = {
-      scopes: ['User.Read.All', 'https://graph.microsoft.com/AppRoleAssignment.ReadWrite.All' ,'Application.Read.All'],
-      account: accounts[0], // Ensure accounts[0] is defined or handle potential undefined case
+      scopes: [
+        'User.Read.All',
+        'https://graph.microsoft.com/AppRoleAssignment.ReadWrite.All',
+        'Application.Read.All',
+      ],
+      account: accounts[0],
     };
 
     try {
       const response = await instance.acquireTokenSilent(accessTokenRequest);
       setAccessToken(response.accessToken);
     } catch (error) {
-      console.error('Failed to acquire token silently:', error);
-
       if (error instanceof InteractionRequiredAuthError) {
         try {
-          // Here, accessTokenRequest is defined because it's in the same function scope
           const interactiveResponse = await instance.acquireTokenPopup(accessTokenRequest);
           setAccessToken(interactiveResponse.accessToken);
         } catch (interactiveError) {
@@ -64,8 +69,120 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
       }
     }
   };
+  const enrichAssignments = async (users) => {
+    try {
+      const enrichedUsers = await Promise.all(
+        users.map(async (user) => {
+          // Fetch roles assigned to this specific user
+          const roles = await fetchAssignedRoles(user.id);
+          
+          if (roles.length > 0) { // Only enrich users with roles
+            const enrichedRoles = await Promise.all(
+              roles.map(async (assignment) => {
+                // Fetch role details from Microsoft Graph
+                const roleDetails = await fetch(
+                  `https://graph.microsoft.com/v1.0/servicePrincipals/${assignment.resourceId}/appRoles`,
+                  {
+                    method: 'GET',
+                    headers: {
+                      'Authorization': `Bearer ${accessToken}`,
+                    },
+                  }
+                );
+                if (!roleDetails.ok) {
+                  throw new Error('Failed to fetch role details');
+                }
+                const roleData = await roleDetails.json();
+                const matchingRole = roleData.value.find(
+                  (role) => role.id === assignment.appRoleId
+                );
+                return { ...assignment, roleInfo: matchingRole };
+              })
+            );
+            return { ...user, roles: enrichedRoles };
+          }
+          return null; // Return null if no roles found
+        })
+      );
+      
+      // Filter out null values (users without roles)
+      const filteredEnrichedUsers = enrichedUsers.filter(user => user !== null);
+      
+      // Set the enriched users with roles in the state
+      setEnrichedAssignments(filteredEnrichedUsers);
+      console.log('Enriched Users with Roles:', filteredEnrichedUsers); // Log users with their roles
+    } catch (error) {
+      console.error('Error enriching assignments:', error);
+    }
+  };
   
+  
+  
+  const fetchAssignedRoles = async (userId) => {
+    try {
+      const url = `https://graph.microsoft.com/v1.0/users/${userId}/appRoleAssignments`; // Change to user-specific roles
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch assigned roles');
+      }
+  
+      const data = await response.json();
+      return data.value; // List of roles assigned to the user
+    } catch (error) {
+      console.error('Error fetching assigned roles:', error);
+      return [];
+    }
+  };
+  
+  const fetchAllUsers = async () => {
+    try {
+      const response = await fetch('https://graph.microsoft.com/v1.0/users', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
 
+      if (!response.ok) {
+        throw new Error('Failed to fetch users');
+      }
+
+      const data = await response.json();
+      return data.value; // List of all users
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+      return [];
+    }
+  };
+
+  const checkUserAuthorization = async () => {
+    if (!accessToken) return;
+  
+    try {
+      const allUsers = await fetchAllUsers();
+      await enrichAssignments(allUsers);
+  
+      const roles = await fetchAssignedRoles(account.localAccountId); // Ensure to check roles for the current user
+      setUserRoles(roles.map((role) => role.appRoleId));
+  
+      const hasValidRole = roles.some((role) => allowedRoles.includes(role.appRoleId));
+      setIsAuthorized(hasValidRole);
+  
+      if (!hasValidRole) {
+        console.warn('User is not authorized. Logging out.');
+        handleLogout();
+      }
+    } catch (error) {
+      console.error('Authorization check failed:', error);
+    }
+  };
+  
   const getAllUserProfiles = async () => {
     try {
       const response = await fetch('https://graph.microsoft.com/v1.0/users', {
@@ -86,105 +203,21 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
       console.error('Failed to fetch user profiles:', error);
     }
   };
-
-  const fetchServicePrincipalRoles = async () => {
-    try {
-      const url = `https://graph.microsoft.com/v1.0/servicePrincipals/56b90f31-0d3d-42f6-894b-fff6bd253b38/appRoleAssignedTo`;
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch service principals');
-      }
-  
-      const data = await response.json();
-   // console.log('Service Principal fetched successfully:', data.value);
-    return data.value; 
-    } catch (error) {
-      console.error('Error fetching service principals:', error);
-      throw error;
-    }
-  };
-  
-  const fetchApplicationAppRoles = async () => {
-    try {
-      const response = await fetch(`https://graph.microsoft.com/v1.0/applications(appId='e481b771-1e6c-4d3f-b8e4-ab39987c87d7')`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch application app roles');
-      }
-  
-      const data = await response.json();
-      return data.appRoles; // This contains the definitions of app roles.
-    } catch (error) {
-      console.error('Error fetching application app roles:', error);
-      throw error;
-    }
-  };
-  function enrichAssignmentsWithRoleInfo(assignments, appRoles) {
-  
-    return assignments.map(assignment => {
-      const roleDetail = appRoles.find(role => role.id === assignment.appRoleId);
-      // if (roleDetail) {
-      //   //console.log(`Found matching role for appRoleId ${assignment.appRoleId}: ${roleDetail.displayName}`);
-      // } else {
-      //   //console.log(`No matching role found for appRoleId ${assignment.appRoleId}.`);
-      // }
-  
-      return {
-        ...assignment,
-        roleName: roleDetail?.displayName || 'Unknown Role',
-        roleDescription: roleDetail?.description || 'No description available',
-      };
-    });
-  }
-  
-  
   useEffect(() => {
     if (isAuthenticated) {
       getAccessToken();
     }
   }, [isAuthenticated]);
-  useEffect(() => {
-    const fetchData = async () => {
-      if (accessToken) {
-        try {
-          // Fetch service principal roles
-          const servicePrincipalRoles = await fetchServicePrincipalRoles();
-          setServicePrincipalRoles(servicePrincipalRoles);
-          // Fetch application app roles
-          const applicationAppRoles = await fetchApplicationAppRoles();
-          setAppRoles(applicationAppRoles);
 
-          // Enrich assignments
-          const enrichedAssignments = enrichAssignmentsWithRoleInfo(servicePrincipalRoles, applicationAppRoles);
-          setEnrichedAssignments(enrichedAssignments);
-          // Update state or perform additional actions with enriched assignments
-        } catch (error) {
-          console.error('Error during fetch and enrich process:', error);
-        }
-      }
-    };
+
   
-    fetchData();
-  }, [accessToken, isAuthenticated]); // Trigger this effect when accessToken or isAuthenticated changes
-  
+
+ 
   useEffect(() => {
     if (accessToken) {
-     getAllUserProfiles();
-     //getApplicationDetails();
-   // getUsersAssignedToAppRoles();
-  // fetchServicePrincipalRoles();
-  //fetchApplicationAppRoles();
-  //enrichAssignmentsWithRoleInfo();
+      checkUserAuthorization();
+      getAllUserProfiles();
+
     }
   }, [accessToken]);
 
@@ -192,9 +225,8 @@ const [enrichedAssignments, setEnrichedAssignments] = useState(null);
     isAuthenticated,
     account,
     accessToken,
-    userProfiles,
-    appRoles,
-    servicePrincipalRoles,
+    userRoles,
+    isAuthorized,
     enrichedAssignments,
     getAllUserProfiles,
     login: handleLogin,

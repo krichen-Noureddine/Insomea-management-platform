@@ -1,7 +1,67 @@
 .container {
-    background-color: #182237;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    color: white;
-  }
+  background-color: #182237;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  color: rgb(189, 92, 92);
+}
+
+.searchAndFilterBar {
+  display: flex; 
+  align-items: center;
+  padding: 12px;
+  gap: 15px;
+  border-radius: 15px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+  margin-bottom: 20px;
+}
+
+.searchInput, .filterSelect {
+  padding: 10px 15px;
+  border: 2px solid #128C8B;
+  border-radius: 20px;
+  background-color: var(--bg, #812d2d);
+  color: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filterSelect {
+  min-width: 150px;
+}
+
+.searchInput:hover, .filterSelect:hover {
+  border-color: #0a6c6b;
+  box-shadow: 0px 0px 6px rgba(18, 140, 139, 0.3);
+}
+
+.searchInput:focus, .filterSelect:focus {
+  outline: none;
+  border-color: #0a6c6b;
+  box-shadow: 0px 0px 6px rgba(10, 108, 107, 0.5);
+}
+
+.Button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background-color: #128C8B;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin : 5px;
+}
+
+.MuiPagination-root {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.MuiPaginationItem-root {
+  border-radius: 10px;
+}

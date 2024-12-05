@@ -2,7 +2,6 @@
 
 const { ConfidentialClientApplication } = require("@azure/msal-node");
 
-// Configuration for the MSAL node, to be used for obtaining tokens for Power BI
 const msalConfigNode = {
     auth: {
        
