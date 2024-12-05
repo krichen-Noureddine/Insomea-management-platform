@@ -68,6 +68,14 @@
   color: white; /* Change #888 to whatever color you prefer */
   opacity: 1; /* Ensures the color is not transparent; adjust as needed */
 }
+.rsuite-wrapper .rs-calendar-table-cell-day {
+  color: black; /* Exemple de personnalisation */
+}
+
+.rsuite-wrapper * {
+  /* Ajoutez ici des styles pour limiter l'impact global */
+  all: revert; /* Réinitialiser les styles */
+}
 
 /* Date picker styling */
 .dateRangePicker .rs-picker-toggle {
@@ -81,10 +89,65 @@
 .dateRangePicker .rs-picker-toggle-placeholder {
   color: rgb(255, 255, 255); /* Adjust placeholder color as needed */
 }
+.filterSelect1 .rs-picker-toggle {
+  border: 1px solid #ccc !important;
+  padding: 10px !important;
+}
 
 .dateRangePicker .rs-picker-toggle-clean {
   color: #128C8B; /* Adjust clear button color as needed */
 }
+.rs-calendar-table-cell {
+  color: black !important; /* Assurez-vous que les chiffres sont visibles */
+}
+
+.rs-calendar-table-cell-selected {
+  background-color: #007bff !important; /* Couleur de fond pour la sélection */
+  color: white !important; /* Couleur du texte pour les dates sélectionnées */
+}
+.rs-calendar-table-cell-day {
+  font-size: 14px; /* Taille du texte */
+  color: black; /* Texte en noir */
+  background-color: white; /* Fond blanc */
+  border-radius: 4px; /* Coins arrondis */
+  padding: 5px; /* Espacement interne */
+  cursor: pointer; /* Changer le curseur en pointeur */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Animation douce */
+}
+
+.rs-calendar-table-cell-day:hover {
+  background-color: #e0e0e0; /* Fond gris clair au survol */
+  color: black; /* Texte reste noir */
+}
+
+.rs-calendar-table-cell-day-selected {
+  background-color: black; /* Fond noir pour les dates sélectionnées */
+  color: white; /* Texte en blanc pour contraste */
+  font-weight: bold; /* Texte en gras */
+}
+
+.rs-calendar-table-cell-day-disabled {
+  color: #a0a0a0; /* Texte gris pour les jours désactivés */
+  background-color: #f9f9f9; /* Fond gris clair */
+  cursor: not-allowed; /* Curseur interdit */
+}
+
+.rs-calendar-table-cell .rs-calendar-table-cell-content {
+  font-size: 14px !important; /* Ajustez la taille de la police si nécessaire */
+}
+
+/* Styles pour DateRangePicker */
+.rs-picker-toggle {
+  border: 1px solid #ccc;
+  background: white;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.rs-picker-menu {
+  z-index: 1050; /* S'assurer que le menu est visible */
+}
+
 .totalCostContainer {
   margin-top: 20px;
   font-size: 1.2em;

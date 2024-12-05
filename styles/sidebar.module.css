@@ -1,27 +1,59 @@
 
   
-  .user{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .userImage{
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .userDetail{
-    display: flex;
-    flex-direction: column;
-  }
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: white !important; /* Force la couleur blanche pour tout l'ensemble */
+}
+
+.userImage {
+  border-radius: 50%;
+  object-fit: cover;
+  color: white !important; /* Force la couleur blanche pour l'icône */
+}
+
+.userDetail {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-weight: bold; /* Optionnel pour rendre le nom plus visible */
+  color: white !important; /* Force la couleur blanche */
+}
+
+.userTitle {
+  font-size: 12px;
+  color: white !important; /* Force la couleur blanche */
+  opacity: 0.8; /* Ajoute un contraste léger, optionnel */
+}
+
   .logoContainer {
     margin-top: auto;
     /* Adjust margin as needed */
    /* Don't forget to include the unit (px) */
     width:  auto; /* Keep width consistent with the image width */
     height:  auto; /* Keep height consistent with the image height */
+  }
+  .list li a {
+    color: white !important; /* Force la couleur blanche */
+    text-decoration: none; /* Supprime les soulignements */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border-radius: 5px; /* Ajoute un effet visuel */
+    transition: background-color 0.3s ease;
+  }
+  
+  .list li a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Ajoute un effet de survol */
+  }
+  
+  .list li a svg {
+    color: white !important; /* Force la couleur blanche des icônes */
   }
   
  

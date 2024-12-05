@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
-import { DateRangePicker } from 'rsuite';
 import { subDays, startOfDay, endOfDay } from 'date-fns';
 import styles from "@/styles/Historique.module.css";
+import { DateRangePicker } from 'rsuite';
+//import 'rsuite/dist/rsuite.min.css';
 
 const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initialCompanyNames, error }) => {
   const [filters, setFilters] = useState({
@@ -187,13 +188,16 @@ const HistoriquePage = ({ historiqueRecords: initialRecords, companyNames: initi
           placeholder="Select Subscription"
         />
 
-        <DateRangePicker
-          className={`${styles.filterSelect1} `}
-          value={dateRange}
-          onChange={handleDateChange}
-          placeholder="Select Date Range"
-          ranges={predefinedRanges}
-        />
+<div className="rsuite-wrapper">
+  <DateRangePicker
+    className={`${styles.filterSelect1}`}
+    value={dateRange}
+    onChange={handleDateChange}
+    placeholder="Select Date Range"
+    ranges={predefinedRanges}
+  />
+</div>
+
 
         <Select
           className={styles.filterSelect1}

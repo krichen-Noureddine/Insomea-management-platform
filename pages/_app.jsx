@@ -4,7 +4,6 @@ import App from 'next/app';
 import Layout from '../components/layout';
 
 import '../styles/globals.css';
-import 'rsuite/dist/rsuite.min.css'; // Import global pour les styles Rsuite
 
 import { MsalProvider } from '@azure/msal-react';
 import { msalInstance } from '../utils/msalConfig';
