@@ -24,20 +24,20 @@ steps:
     npm install
   displayName: 'Install dependencies'
 
-- task: DownloadSecureFile@1
-  name: DownloadEnvFile
-  inputs:
-    secureFile: '.env.local'
-  displayName: 'Download .env.local'
+# - task: DownloadSecureFile@1
+#   name: DownloadEnvFile
+#   inputs:
+#     secureFile: '.env.local'
+#   displayName: 'Download .env.local'
 
-- script: |
-    copy $(Agent.TempDirectory)\.env.local $(System.DefaultWorkingDirectory)
-  displayName: 'Copy .env.local to working directory'
-  condition: eq(variables['Agent.OS'], 'Windows_NT') # Only run on Windows
+# - script: |
+#     copy $(Agent.TempDirectory)\.env.local $(System.DefaultWorkingDirectory)
+#   displayName: 'Copy .env.local to working directory'
+#   condition: eq(variables['Agent.OS'], 'Windows_NT') # Only run on Windows
 
-- script: |
-    echo "MONGODB_URI is set." # Note: This will not print the actual value due to secret masking
-  displayName: 'Print MongoDB URI'
+# - script: |
+#     echo "MONGODB_URI is set." # Note: This will not print the actual value due to secret masking
+#   displayName: 'Print MongoDB URI'
 
 - script: |
     npm run lint
@@ -47,8 +47,19 @@ steps:
     npm run build
   displayName: 'Build application'
 
+# - script: |
+#     npm run start-scheduler
+#   displayName: 'Run scheduler script'
+
+# Docker Compose steps
 - script: |
-    npm run start-scheduler
-  displayName: 'Run scheduler script'
+    docker-compose -f docker-compose.yml build
+  displayName: 'Build Docker images with Docker Compose'
 
+- script: |
+    docker-compose -f docker-compose.yml push
+  displayName: 'Push Docker images to registry'
 
+- script: |
+    docker-compose -f docker-compose.yml up -d
+  displayName: 'Run Docker Compose'
