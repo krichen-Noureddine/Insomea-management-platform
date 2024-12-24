@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/styles/form.module.css'; // Import CSS module file for styling
 import { DeleteConfirmationPopup } from './DeleteConfirmationPopup';
 import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const ClientsTable = ({ clients, setClients, onEdit }) => {
   const router = useRouter();
@@ -50,8 +52,6 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
   const handleGroupByChange = (e) => {
     setGroupByOption(e.target.value);
   };
-
-
 
   const promptDelete = (clientId) => {
     setShowDeletePopup(true);
@@ -109,8 +109,6 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
           <option value="address">Address</option>
           <option value="alphabetical">Alphabetical</option>
         </select>
-        {/* Sort Button */}
-        
       </div>
 
       <div className={styles.tableWrapper}>
@@ -151,7 +149,7 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
                     }}
                     style={{ marginRight: '10px' }}
                   >
-                    🖊 Edit
+                    <FontAwesomeIcon icon={faEdit} /> Edit
                   </button>
                   <button
                     className={styles.button}
@@ -160,7 +158,7 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
                       promptDelete(client._id);
                     }}
                   >
-                    🗑 Delete
+                    <FontAwesomeIcon icon={faTrashAlt} /> Delete
                   </button>
                 </td>
               </tr>

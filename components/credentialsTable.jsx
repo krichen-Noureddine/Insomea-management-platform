@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from "@/styles/form.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-const CredentialsComponent = ({ credentials, clients }) => {
+const CredentialsComponent = ({ credentials, clients, onUpdate, onDelete }) => {
     return (
         <div className={styles.container}>
             <h2>Client Credentials</h2>
@@ -16,6 +16,7 @@ const CredentialsComponent = ({ credentials, clients }) => {
                         <th>Client Secret</th>
                         <th>Expires</th>
                         <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,6 +30,24 @@ const CredentialsComponent = ({ credentials, clients }) => {
                                 <td>{credential.clientSecret}</td>
                                 <td>{credential.expirationDate ? new Date(credential.expirationDate).toLocaleDateString() : 'No expiration date'}</td>
                                 <td><FontAwesomeIcon icon={faCheckCircle} style={{ color: 'green' }} /></td>
+                                <td>
+                                    {/* Update Button */}
+                                    <button
+                                        className={styles.actionButton}
+                                        onClick={() => onUpdate(credential)}
+                                    >
+                                        <FontAwesomeIcon icon={faEdit} /> Update
+                                    </button>
+                                    
+                                    {/* Delete Button */}
+                                    <button
+                                        className={styles.actionButton}
+                                        onClick={() => onDelete(credential._id)}
+                                        style={{ color: 'red' }}
+                                    >
+                                        <FontAwesomeIcon icon={faTrashAlt} /> Delete
+                                    </button>
+                                </td>
                             </tr>
                         );
                     })}

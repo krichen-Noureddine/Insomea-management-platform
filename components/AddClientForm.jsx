@@ -113,7 +113,7 @@ const ClientForm = ({ initialData, handleSubmit, showForm, setShowForm, resetFor
                             </select>
                             {errors.organizationType && <p className={styles.error}>{errors.organizationType.message}</p>}
                         </div>
-                        <div className={styles.formGroup}>
+                        {/* <div className={styles.formGroup}>
                             <input
                                 type="text"
                                 id="clientAddress"
@@ -121,7 +121,7 @@ const ClientForm = ({ initialData, handleSubmit, showForm, setShowForm, resetFor
                                 {...register('clientAddress')}
                                 className={styles.input}
                             />
-                        </div>
+                        </div> */}
 
                         <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
                             {isSubmitting ? 'Submitting...' : (initialData ? 'Update' : 'Create')}

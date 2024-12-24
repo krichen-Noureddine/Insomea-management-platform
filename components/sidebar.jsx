@@ -10,6 +10,7 @@ import {
   MdShoppingBag,
   MdAttachMoney,
   MdWork,
+  MdCloud   ,
   MdAnalytics,
 
   MdOutlineSettings,
@@ -31,9 +32,9 @@ const menuItems = [
         icon: <MdDashboard />,
       },
       {
-        title: "Azure Subscriptions",
+        title: "   Azure ",
         path: "/Subscriptions",
-        icon: <MdShoppingBag />,
+        icon: <MdCloud    />,
       },
       {
         title: "Licences office 365",

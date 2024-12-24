@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - COMMUNICATION_SERVICES_CONNECTION_STRING=endpoint=https://imp-comservice.europe.communication.azure.com/;accesskey=OBXwChjY591atrskvMPBaw+g9TbU8Le9eiXg5QyVs210HLvFfGMJyxKFYaRy3al2FRoxFjtul6dC5ZkQcWRBvQ==
+      - COMMUNICATION_SERVICES_CONNECTION_STRING=endpoint=https://supportformcomm.unitedstates.communication.azure.com/;accesskey=6krrtwOn8lUulPaG3y9MARqi9QpSa6OVcWpQmXLgdrzhtYMrHMJMJQQJ99AHACULyCphwZzzAAAAAZCSEifo
       - MONGODB_URI=mongodb://imp12:MOKJeQxpy4tBKWqgach9xBASefKojzGfMzZ2AmQwEI7IZHY0ctqvF8Df6gfry7eclwPHkLAoI4BPACDb3uldsA==@imp12.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@imp12@
       - NODE_ENV=production
       - CLIENT_ID=e481b771-1e6c-4d3f-b8e4-ab39987c87d7
