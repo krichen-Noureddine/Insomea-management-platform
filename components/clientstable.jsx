@@ -14,6 +14,10 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
   const [groupByOption, setGroupByOption] = useState('');
   const [sortOrder, setSortOrder] = useState('asc'); // Default sort order: ascending
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // Function to sort clients based on the selected field and order
   const sortClients = (clients, field, order) => {
     return clients.sort((a, b) => {
@@ -92,7 +96,17 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
   if (isLoading) return <p>Loading clients...</p>;
   if (!clients.length) return <p>No clients found.</p>;
 
+  // Group and sort clients
   const groupedAndSortedClients = groupClients(filteredClients, groupByOption);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(groupedAndSortedClients.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentClients = groupedAndSortedClients.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   return (
     <div className={styles.container}>
@@ -129,7 +143,7 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
             </tr>
           </thead>
           <tbody>
-            {groupedAndSortedClients.map((client) => (
+            {currentClients.map((client) => (
               <tr
                 key={client._id}
                 onClick={() => router.push(`/clients/${client._id}`)}
@@ -165,6 +179,25 @@ const ClientsTable = ({ clients, setClients, onEdit }) => {
             ))}
           </tbody>
         </table>
+
+        {/* Pagination Controls */}
+        <div className={styles.pagination}>
+          <button
+            className={styles.paginationButton}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>{`Page ${currentPage} of ${totalPages}`}</span>
+          <button
+            className={styles.paginationButton}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

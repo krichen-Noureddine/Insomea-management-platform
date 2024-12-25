@@ -111,14 +111,7 @@ const UserRolesPage = () => {
                 <td>{user.role}</td>
                 <td>{user.type}</td>
                 <td>{user.description}</td>
-                <td>
-                    <button
-                        className={styles.actionButton}
-                        onClick={() => handleUserAction(user.id)}
-                    >
-                        Manage
-                    </button>
-                </td>
+             
             </tr>
         ));
     };
@@ -142,7 +135,6 @@ const UserRolesPage = () => {
                             <th>Role</th>
                             <th>Type</th>
                             <th>Role Description</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>{renderTableRows()}</tbody>

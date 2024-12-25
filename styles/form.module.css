@@ -8,7 +8,7 @@
     gap: 80px; 
 }
 .error {
-    color: red;
+    color: rgb(215, 131, 131);
     font-size: 0.9em;
     margin-top: 5px;
 }
@@ -245,3 +245,33 @@
     color: white; /* Change #888 to whatever color you prefer */
     opacity: 1; /* Ensures the color is not transparent; adjust as needed */
 }
+/* form.module.css */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    font-size: 14px;
+    gap: 15px;
+  }
+  
+  .paginationButton {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .paginationButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .paginationButton:disabled {
+    background-color: #e2e2e24a;
+    cursor: not-allowed;
+  }
+  

@@ -94,7 +94,7 @@ const ClientForm = ({ initialData, handleSubmit, showForm, setShowForm, resetFor
                                 type="text"
                                 id="clientLocation"
                                 placeholder='Location'
-                                {...register('clientLocation')}
+                                {...register('clientLocation',{ required: 'Client Location is required'})}
                                 className={styles.input}
                             />
                         </div>
